@@ -7,66 +7,68 @@ else
 endif
 set backupskip=/tmp/*,/private/tmp/*
 if os != "windows"
-"" . resolve(expand("%:p")) . "&" . resolve(expand("%:p")) . "&"Vundle stuff...
-filetype on 
-filetype off
-set rtp+=~/.vim/vundle.git/
-call vundle#rc()
-let $GIT_SSL_NO_VERIFY = 'true'
-""
-" My Bundles:
-" "
-" github hosted
-Bundle 'scrooloose/nerdtree.git'
-Bundle 'scrooloose/nerdcommenter.git'
-Bundle 'theevocater/vim-perforce.git'
-Bundle 'vim-scripts/TeTrIs.vim.git'
-Bundle 'vim-scripts/taglist.vim.git'
-Bundle 'fholgado/minibufexpl.vim.git'
-Bundle 'msanders/snipmate.vim.git'
-"Bundle 'Lokaltog/vim-easymotion'
-Bundle 'chrisbra/NrrwRgn.git'
-Bundle 'vimoutliner/vimoutliner.git'
-"Mac only..
-Bundle 'tpope/vim-fugitive'
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
-""
-"testing
-Bundle 'mhinz/vim-startify.git'
-let g:startify_unlisted_buffer = 0
-""
-"Better autocompleting.
-Bundle 'Shougo/neocomplcache.git'
-"Allows async in neocomplcache
-Bundle 'Shougo/vimproc.git'
-""
-"Perl
-Bundle 'vim-scripts/perl-support.vim.git'
-"color scheme.
-Bundle 'altercation/vim-colors-solarized'
-""
-"vimux setup
-Bundle 'benmills/vimux.git'
-"For vimux to work over nfs cleanly; disable warnings. Can do this via
-"'VERBOSE=nil' in the ruby code somewhere.
-""
-"Powerline is pretty.
-Bundle 'Lokaltog/vim-powerline.git'
-""
-"for browser.. not working?
-"Bundle 'vim-scripts/browser.vim.git'
-"Bundle 'vim-scripts/synmark.vim.git'
-""
-"
-"vim-pad crashes me. Why? It looks promising, bug report filed.
-"Bundle 'fmoralesc/vim-pad.git'
-"Bundle 'scrooloose/syntastic.git'
-"Bundle 'vim-scripts/ZoomWin.git'
-"Bundle 'vim-scripts/AutoComplPop.git'
-"Bundle 'kien/ctrlp.vim.git'
-" End my Bundles.
-""
+    "" . resolve(expand("%:p")) . "&" . resolve(expand("%:p")) . "&"Vundle stuff...
+    filetype on 
+    filetype off
+    set rtp+=~/.vim/vundle.git/
+    call vundle#rc()
+    let $GIT_SSL_NO_VERIFY = 'true'
+    ""
+    " My Bundles:
+    " "
+    " github hosted
+    Bundle 'scrooloose/nerdtree.git'
+    Bundle 'scrooloose/nerdcommenter.git'
+    Bundle 'theevocater/vim-perforce.git'
+    "Bundle 'vim-scripts/TeTrIs.vim.git'
+    Bundle 'vim-scripts/taglist.vim.git'
+    Bundle 'fholgado/minibufexpl.vim.git'
+    Bundle 'msanders/snipmate.vim.git'
+    "Bundle 'Lokaltog/vim-easymotion'
+    Bundle 'chrisbra/NrrwRgn.git'
+    Bundle 'vimoutliner/vimoutliner.git'
+    "Mac only..
+    if os != "Darwin"
+        Bundle 'tpope/vim-fugitive'
+        Bundle 'rizzatti/funcoo.vim'
+        Bundle 'rizzatti/dash.vim'
+    endif
+    ""
+    "testing
+    Bundle 'mhinz/vim-startify.git'
+    let g:startify_unlisted_buffer = 0
+    ""
+    "Better autocompleting.
+    Bundle 'Shougo/neocomplcache.git'
+    "Allows async in neocomplcache
+    Bundle 'Shougo/vimproc.git'
+    ""
+    "Perl
+    Bundle 'vim-scripts/perl-support.vim.git'
+    "color scheme.
+    Bundle 'altercation/vim-colors-solarized'
+    ""
+    "vimux setup
+    Bundle 'benmills/vimux.git'
+    "For vimux to work over nfs cleanly; disable warnings. Can do this via
+    "'VERBOSE=nil' in the ruby code somewhere.
+    ""
+    "Powerline is pretty.
+    Bundle 'Lokaltog/vim-powerline.git'
+    ""
+    "for browser.. not working?
+    "Bundle 'vim-scripts/browser.vim.git'
+    "Bundle 'vim-scripts/synmark.vim.git'
+    ""
+    "
+    "vim-pad crashes me. Why? It looks promising, bug report filed.
+    "Bundle 'fmoralesc/vim-pad.git'
+    "Bundle 'scrooloose/syntastic.git'
+    "Bundle 'vim-scripts/ZoomWin.git'
+    "Bundle 'vim-scripts/AutoComplPop.git'
+    "Bundle 'kien/ctrlp.vim.git'
+    " End my Bundles.
+    ""
 endif
 
 filetype plugin indent on
