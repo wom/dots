@@ -22,10 +22,11 @@ if os != "windows"
     Bundle 'theevocater/vim-perforce.git'
     "Bundle 'vim-scripts/TeTrIs.vim.git'
     Bundle 'vim-scripts/taglist.vim.git'
-    Bundle 'fholgado/minibufexpl.vim.git'
+    Bundle 'vim-scripts/matchit.zip'
+    "Bundle 'fholgado/minibufexpl.vim.git'
     Bundle 'msanders/snipmate.vim.git'
     "Bundle 'Lokaltog/vim-easymotion'
-    Bundle 'chrisbra/NrrwRgn.git'
+    "Bundle 'chrisbra/NrrwRgn.git'
     Bundle 'vimoutliner/vimoutliner.git'
     "Mac only..
     if os != "Darwin"
@@ -33,10 +34,6 @@ if os != "windows"
         Bundle 'rizzatti/funcoo.vim'
         Bundle 'rizzatti/dash.vim'
     endif
-    ""
-    "testing
-    Bundle 'mhinz/vim-startify.git'
-    let g:startify_unlisted_buffer = 0
     ""
     "Better autocompleting.
     Bundle 'Shougo/neocomplcache.git'
@@ -54,7 +51,7 @@ if os != "windows"
     "'VERBOSE=nil' in the ruby code somewhere.
     ""
     "Powerline is pretty.
-    Bundle 'Lokaltog/vim-powerline.git'
+    "Bundle 'Lokaltog/vim-powerline.git'
     ""
     "for browser.. not working?
     "Bundle 'vim-scripts/browser.vim.git'
@@ -85,12 +82,12 @@ set wcm=<C-Z>
 if os != "windows"
 ""
 "For Powerline
-set laststatus=2
-set encoding=utf-8
-set t_Co=256
-let g:Powerline_symbols = 'compatible'
-let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
-call Pl#Theme#InsertSegment('currhigroup', 'after', 'TARGET_SEGMENT')
+"set laststatus=2
+"set encoding=utf-8
+"set t_Co=256
+"let g:Powerline_symbols = 'compatible'
+"let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
+"call Pl#Theme#InsertSegment('currhigroup', 'after', 'TARGET_SEGMENT')
 ""
 endif
 ""
@@ -101,6 +98,15 @@ map <silent> <A-j> <C-W>-
 map <silent> <A-k> <C-W>+ 
 map <silent> <A-l> <C-w>> 
 ""
+"Tab!
+map <tab> %
+silent! unmap [%
+silent! unmap ]%
+"Move..
+"
+noremap H ^
+noremap L $
+vnoremap L g_
 let g:NERDTreeDirArrows=0
 highlight TrailingWhitespace ctermbg=red  guibg=red
 match     TrailingWhitespace /\s\+$/
@@ -112,12 +118,16 @@ nmap <Backspace><Backspace> :let _s=@/<Bar>:.s/\s\+$//ge<Bar>:let @/=_s<Bar>:noh
 ""
 set textwidth=80
 inoremap kj <Esc>
+inoremap jj <Esc>jj
+inoremap kk <Esc>kk
+inoremap :wq <Esc>:wq
 "set cc=+1
 "/test
 ""
 
 ""
 "Environ Specific.
+autocmd BufRead,BufNewFile *.json     set filetype=json
 "thpl as perl mapping.
 autocmd BufRead,BufNewFile *.thpl     set filetype=perl
 "conf as perl mapping.
@@ -318,9 +328,19 @@ function! MyDate()
         normal! "xp
 endf
 
-map <leader>nc          :CheckPerl<CR>
-map <leader>pt          :!perltidy<CR>
-"map <leader>ct          :!column -t<CR>
+""File type specific...
+augroup filters
+    autocmd!
+    autocmd FileType perl       map <buffer> <leader>tt :!perltidy<CR>
+    autocmd FileType perl       map <buffer> <leader>l :CheckPerl<CR>
+    autocmd FileType php        map <buffer> <leader>l :CheckPhp<CR>
+    autocmd FileType python     map <buffer> <leader>l :CheckPy<CR>
+    autocmd FileType python     map <buffer> <leader>tt :!autopep8  --indent-size 4 --aggressive -<CR>
+    autocmd FileType javascript map <buffer> <leader>tt :!uglifyjs -b<CR>
+    autocmd FileType json       map <buffer> <leader>tt :!python -mjson.tool<CR>
+augroup END
+
+map <leader>ct          :!column -t<CR>
 map <leader>n           :NERDTreeToggle<CR>
 map <leader>t           :Tlist<CR>
 map <leader><space>     :nohlsearch <CR>
@@ -445,13 +465,6 @@ function! DiffOrig()
         vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
     endif
 endfunction
-if has("unix")
-    nmap <silent> <leader>pe :execute ":!p4 edit " . resolve(expand("%:p")) . "&"<CR>
-    "nmap <silent> <leader>po :execute ":!p4 opened "<CR>
-    nmap <silent> <leader>po :call RunCmd("p4 opened")<CR>
-    nmap <silent> <leader>pr :execute ":!p4 revert " . resolve(expand("%:p")) . "&"<CR>
-    nmap <silent> <leader>pa :execute ":!p4 add " . resolve(expand("%:p")) . "&"<CR>
-endif
 
 "DiffP4 Mapping.
 function! DiffP4()
@@ -505,5 +518,82 @@ command!          RunMisc            call RunCmdOnFile("")
 command! -nargs=1 TRun               call VimuxRunCommand("clear; " . bufname("%") . <q-args>)
 command!          TRunPerl           call VimuxRunCommand("clear; /usr/bin/perl ". bufname("%"))
 command!          TRunMisc           call VimuxRunCommand("clear; " . bufname("%"))
+command!          CheckPerl          call RunCmdOnFile("/x/eng/localtest/noarch/share/nate/4/last/bin/natelint ")
+command!          CheckPhp           call RunCmdOnFile("/usr/bin/php -l ")
+command!          CheckPy            call RunCmdOnFile("/usr/local/bin/pep8 ")
 ""
 
+
+
+""
+"{{{
+" Highlight Word
+"
+" This mini-plugin provides a few mappings for highlighting words temporarily.
+"
+" Sometimes you're looking at a hairy piece of code and would like a certain
+" word or two to stand out temporarily.  You can search for it, but that only
+" gives you one color of highlighting.  Now you can use <leader>N where N is
+" a number from 1-6 to highlight the current word in a specific color.
+"   {{{
+function! HiInterestingWord(n) 
+    " Save our location.
+    normal! mz
+
+    " Yank the current word into the z register.
+    normal! "zyiw
+
+    " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
+    let mid = 86750 + a:n
+
+    " Clear existing matches, but don't worry if they don't exist.
+    silent! call matchdelete(mid)
+
+    " Construct a literal pattern that has to match at boundaries.
+    let pat = '\V\<' . escape(@z, '\') . '\>'
+
+    " Actually match the words.
+    call matchadd("InterestingWord" . a:n, pat, 1, mid)
+
+    " Move back to our original location.
+    normal! `z
+endfunction " }}}
+
+" Mappings
+"   {{{
+
+nnoremap <silent> <leader>1 :call HiInterestingWord(1)<cr>
+nnoremap <silent> <leader>2 :call HiInterestingWord(2)<cr>
+nnoremap <silent> <leader>3 :call HiInterestingWord(3)<cr>
+nnoremap <silent> <leader>4 :call HiInterestingWord(4)<cr>
+nnoremap <silent> <leader>5 :call HiInterestingWord(5)<cr>
+nnoremap <silent> <leader>6 :call HiInterestingWord(6)<cr>
+nnoremap <silent> <leader>0 :call clearmatches()<cr>
+
+"   }}}
+" Default Highlights
+"   {{{
+
+hi def InterestingWord1 guifg=#000000 ctermfg=16 guibg=#ffa724 ctermbg=214
+hi def InterestingWord2 guifg=#000000 ctermfg=16 guibg=#aeee00 ctermbg=154
+hi def InterestingWord3 guifg=#000000 ctermfg=16 guibg=#8cffba ctermbg=121
+hi def InterestingWord4 guifg=#000000 ctermfg=16 guibg=#b88853 ctermbg=137
+hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
+hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
+
+"   }}}
+" }}}
+""
+
+" Testing folding..
+set foldmethod=syntax
+set foldlevelstart=1
+
+let javaScript_fold=1         " JavaScript
+let perl_fold=1               " Perl
+let php_folding=1             " PHP
+let r_syntax_folding=1        " R
+let ruby_fold=1               " Ruby
+let sh_fold_enabled=1         " sh
+let vimsyn_folding='af'       " Vim script
+let xml_syntax_folding=1      " XML
