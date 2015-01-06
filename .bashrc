@@ -5,6 +5,8 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
+unamestr=`uname`
+
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
@@ -13,8 +15,8 @@ if [ -f ~/scripts/git-completion.bash ]; then
     . ~/scripts/git-completion.bash
 fi
 
-USER=mchris
-export PATH="/usr/local/bin:$PATH:/Users/mchris/scripts"
+USER=`whoami`
+export PATH="/usr/local/bin:$PATH:/Users/${USER}/scripts"
 #save history from all terminals.
 shopt -s histappend
 PROMPT_COMMAND='history -a'
@@ -145,5 +147,7 @@ weather ()
 #fi
 ##
 
+if [[ "$unamestr" == 'Darwin' ]]; then
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-[[ -s "/Users/mchris/.gvm/bin/gvm-init.sh" ]] && source "/Users/mchris/.gvm/bin/gvm-init.sh"
+    [[ -s "/Users/${USER}/.gvm/bin/gvm-init.sh" ]] && source "/Users/${USER}/.gvm/bin/gvm-init.sh"
+fi 
