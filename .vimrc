@@ -44,7 +44,8 @@ if os != "windows"
     "Bundle 'Shougo/vimproc.git'
     ""
     "Perl
-    Bundle 'vim-scripts/perl-support.vim.git'
+    "Bundle 'vim-scripts/perl-support.vim.git'
+    Bundle 'vim-perl/vim-perl'
     "color scheme.
     Bundle 'altercation/vim-colors-solarized'
     ""
