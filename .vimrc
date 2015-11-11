@@ -1,5 +1,5 @@
 set nocompatible
-"
+
 if has("win32") || has("win16")
         let os="windows"
 else 
@@ -10,6 +10,10 @@ if os != "windows"
     "" . resolve(expand("%:p")) . "&" . resolve(expand("%:p")) . "&"Vundle stuff...
     filetype on 
     filetype off
+    ""
+    " Vundle Setup...
+    "   git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/vundle.git
+    "
     set rtp+=~/.vim/vundle.git/
     call vundle#rc()
     let $GIT_SSL_NO_VERIFY = 'true'
@@ -19,7 +23,6 @@ if os != "windows"
     " github hosted
     Bundle 'scrooloose/nerdtree.git'
     Bundle 'scrooloose/nerdcommenter.git'
-    Bundle 'theevocater/vim-perforce.git'
     "Bundle 'vim-scripts/TeTrIs.vim.git'
     Bundle 'vim-scripts/taglist.vim.git'
     Bundle 'vim-scripts/matchit.zip'
@@ -28,17 +31,17 @@ if os != "windows"
     "Bundle 'Lokaltog/vim-easymotion'
     "Bundle 'chrisbra/NrrwRgn.git'
     Bundle 'vimoutliner/vimoutliner.git'
-    "Mac only..
-    if os != "Darwin"
-        Bundle 'tpope/vim-fugitive'
-        Bundle 'rizzatti/funcoo.vim'
+    Bundle 'tpope/vim-fugitive'
+    Bundle 'rizzatti/funcoo.vim'
+    "if os == "Darwin"
+        "Mac only..
         Bundle 'rizzatti/dash.vim'
-    endif
+    "endif
     ""
     "Better autocompleting.
-    Bundle 'Shougo/neocomplcache.git'
+    "Bundle 'Shougo/neocomplcache.git'
     "Allows async in neocomplcache
-    Bundle 'Shougo/vimproc.git'
+    "Bundle 'Shougo/vimproc.git'
     ""
     "Perl
     Bundle 'vim-scripts/perl-support.vim.git'
@@ -120,7 +123,7 @@ set textwidth=80
 inoremap kj <Esc>
 inoremap jj <Esc>jj
 inoremap kk <Esc>kk
-inoremap :wq <Esc>:wq
+"inoremap :wq <Esc>:wq
 "set cc=+1
 "/test
 ""
@@ -290,17 +293,17 @@ imap <silent> <F3> <C-o><F3>
 map <silent> <F6> :call StripHostName()<CR>
 imap <silent> <F6> <C-o><F6>
 
-if version >= 720
-    """
-    " Enable AutoComplPop.
-    let g:neocomplcache_enable_at_startup = 1
-    let g:neocomplcache_use_vimproc = 1
-    inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<TAB>"
-    inoremap <expr> <C-u> pumvisible() ? neocomplcache#close_popup() : "\<c-u>"
-    inoremap <expr> <C-x><C-u> pumvisible() ? \<C-u> : "\<C-u>"
-else
-    let g:neocomplcache_enable_at_startup = 0
-endif
+"if version >= 720
+    """"
+    "" Enable AutoComplPop.
+    ""let g:neocomplcache_enable_at_startup = 1
+    ""let g:neocomplcache_use_vimproc = 1
+    ""inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<TAB>"
+    ""inoremap <expr> <C-u> pumvisible() ? neocomplcache#close_popup() : "\<c-u>"
+    ""inoremap <expr> <C-x><C-u> pumvisible() ? \<C-u> : "\<C-u>"
+"else
+    "let g:neocomplcache_enable_at_startup = 0
+"endif
 
 imap <silent> <F9> <C-o><F9>
 
@@ -340,7 +343,7 @@ augroup filters
     autocmd FileType json       map <buffer> <leader>tt :!python -mjson.tool<CR>
 augroup END
 
-map <leader>ct          :!column -t<CR>
+map <leader>cf          :!column -t<CR>
 map <leader>n           :NERDTreeToggle<CR>
 map <leader>t           :Tlist<CR>
 map <leader><space>     :nohlsearch <CR>
@@ -412,6 +415,8 @@ function! CheckForShebang()
         if (match( firstLine , '.*perl.*') == 0)
             "echo "Is perl."
             :RunPerl
+        elseif (match( firstLine , '.*python.*') == 0)
+            :RunPy
         else
             :RunMisc
         endif
@@ -451,10 +456,11 @@ function! CheckForShebangTmux()
     endif
 endfunction
 
-"map <leader>e :call CheckForShebang()<cr>
+""
 "map <leader>e :call CheckForShebangTmux()<cr>
 map <leader>e :call CheckForShebang()<cr>
-"
+""
+
 "Disable whitespace in vimdiff...
 set diffopt+=iwhite
 "DiffOrig Mapping.
@@ -514,6 +520,7 @@ endfunction
 " My Run Functions 
 command! -nargs=1 Run                call RunCmdOnFile(<q-args>)
 command!          RunPerl            call RunCmdOnFile("/usr/bin/perl ")
+command!          RunPy              call RunCmdOnFile("`which python` ")
 command!          RunMisc            call RunCmdOnFile("")
 command! -nargs=1 TRun               call VimuxRunCommand("clear; " . bufname("%") . <q-args>)
 command!          TRunPerl           call VimuxRunCommand("clear; /usr/bin/perl ". bufname("%"))
