@@ -14,12 +14,17 @@ fi
 if [ -f ~/scripts/git-completion.bash ]; then
     . ~/scripts/git-completion.bash
 fi
+if [ -f ~/.autojump/etc/profile.d/autojump.sh ]; then
+    . ~/.autojump/etc/profile.d/autojump.sh
+fi
 
 USER=`whoami`
 export PATH="/usr/local/bin:$PATH:/Users/${USER}/scripts"
 #save history from all terminals.
 shopt -s histappend
 PROMPT_COMMAND='history -a'
+
+
 
 ##
 #vi as cl editor. Experiment.
@@ -106,6 +111,11 @@ done
 
 #custom ssh aliases..
 source ~/custCon.sh
+
+##virtualenv lazy loading if exists...
+if hash virtualenvwrapper_lazy.sh 2>/dev/null; then
+    source `which virtualenvwrapper_lazy.sh`
+fi
 
 
 ##
