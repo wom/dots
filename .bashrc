@@ -14,7 +14,13 @@ fi
 if [ -f ~/scripts/git-completion.bash ]; then
     . ~/scripts/git-completion.bash
 fi
-if [ -f ~/.autojump/etc/profile.d/autojump.sh ]; then
+
+##
+# https://github.com/wting/autojump || \
+# brew install autojump
+if [[ "$unamestr" == 'Darwin' ]]; then
+    [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+elif [ -f ~/.autojump/etc/profile.d/autojump.sh ]; then
     . ~/.autojump/etc/profile.d/autojump.sh
 fi
 
