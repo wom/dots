@@ -25,7 +25,7 @@ elif [ -f ~/.autojump/etc/profile.d/autojump.sh ]; then
 fi
 
 USER=`whoami`
-export PATH="/usr/local/bin:$PATH:/Users/${USER}/scripts"
+export PATH="/usr/local/bin:$PATH:~/scripts:~/bin/"
 #save history from all terminals.
 shopt -s histappend
 PROMPT_COMMAND='history -a'
