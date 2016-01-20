@@ -13,7 +13,7 @@ if os != "windows"
     ""
     " Vundle Setup...
     "   git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/vundle.git
-    "
+    "   Then :PluginInstall
     set rtp+=~/.vim/vundle.git/
     call vundle#rc()
     let $GIT_SSL_NO_VERIFY = 'true'
@@ -68,6 +68,14 @@ if os != "windows"
     "Bundle 'vim-scripts/ZoomWin.git'
     "Bundle 'vim-scripts/AutoComplPop.git'
     "Bundle 'kien/ctrlp.vim.git'
+    Bundle 'elzr/vim-json'
+    Bundle 'airblade/vim-gitgutter'
+    ""
+    Bundle 'terryma/vim-expand-region'
+    vmap v <Plug>(expand_region_expand)
+    vmap <C-v> <Plug>(expand_region_shrink)
+
+    ""
     " End my Bundles.
     ""
 endif

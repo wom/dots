@@ -102,6 +102,8 @@ alias realpath='readlink -f'
 alias bc='bc -l'
 alias wget='wget -c'
 alias ltmux="if tmux has; then tmux attach; else tmux new; fi"
+alias startJenk='sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist'
+alias stopJenk='sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist'
 #cd ../ aliases
 dotSlash=""
 for i in 1 2 3 4
