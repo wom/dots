@@ -30,17 +30,6 @@ export PATH="/usr/local/bin:$PATH:~/scripts:~/bin/"
 shopt -s histappend
 PROMPT_COMMAND='history -a'
 
-
-
-##
-#vi as cl editor. Experiment.
-#set -o vi
-#set editing-mode vi
-#set keymap vi
-#set convert-meta on
-##
-
-
 #####
 # build prompt.
 bash_prompt_command()
@@ -57,13 +46,18 @@ prevCmd()
         echo $RED
     fi
 }
-
-if [ $(tput colors) -gt 0 ] ; then
-    RED=$(tput setaf 1)
-    GREEN=$(tput setaf 2)
-    RST=$(tput op)
-fi
-export PS1="\[\e[36m\]\u.\h.\W\[\e[0m\]\[\$prevCmd\]>\[$RST\]"
+case $- in
+*i*)    # interactive shell
+	if [ $(tput colors) -gt 0 ] ; then
+		RED=$(tput setaf 1)
+		GREEN=$(tput setaf 2)
+		RST=$(tput op)
+	fi
+	export PS1="\[\e[36m\]\u.\h.\W\[\e[0m\]\[\$prevCmd\]>\[$RST\]"
+    ;;
+*)      # non-interactive shell
+    ;;
+esac
 # end build prompt.
 #####
 
@@ -86,6 +80,8 @@ alias cpProgress="rsync --progress -ravz"
 alias ping="time ping"
 alias c="clear"
 alias please='sudo'
+alias j=`which autojump`
+
 ##
 #Why doesn't this work?
 #alias vimdiff="vim-7.3diff"
@@ -97,13 +93,14 @@ alias cp="cp -i"
 alias grep="grep --color=tty -d skip"
 alias hd='od -Ax -tx1z -v'
 alias realpath='readlink -f'
-#alias ns="screen -S `date +'%a_%m_%d_%Y'`"
-#alias as="screen -r `screen -list | grep -v 'Socket\|screens on' | grep Detached | awk '{print $1}'`"
 alias bc='bc -l'
 alias wget='wget -c'
 alias ltmux="if tmux has; then tmux attach; else tmux new; fi"
-alias startJenk='sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist'
-alias stopJenk='sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist'
+##
+#alias startJenk='sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist'
+#alias stopJenk='sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist'
+##
+
 #cd ../ aliases
 dotSlash=""
 for i in 1 2 3 4
@@ -129,43 +126,9 @@ fi
 ##
 
 ##
-#todo.sh wrapper
-t() { 
-    if [ $# -eq 0 ]; then
-        ~/scripts/todo.txt_cli-2.9/todo.sh -d ~/.todo/config ls
-    else
-        ~/scripts/todo.txt_cli-2.9/todo.sh  -d ~/.todo/config $* 
-    fi
-}
-##
-#
+# Quick conversions 
 epoc ()
 {
     perl -e "print scalar(localtime($1))"
     echo ""
 }
-
-##
-#current weather.
-weather ()
-{
-    declare -a WEATHERARRAY
-    zip="15202"
-    WEATHERARRAY=( `lynx -dump "http://www.google.com/search?hl=en&lr=&client=firefox-a&rls=org.mozilla%3Aen-US%3Aofficial&q=weather+${zip}&btnG=Search" | grep -A 5 -m 1 "Weather for" |  sed "s/ - \[.*iGoogle/ - /"`)
-    echo ${WEATHERARRAY[@]}
-}
-
-##
-#Screen..
-#if [ "$SSH_CONNECTION" ]; then
-#    if [ -z "$STY" ]; then
-#        # Screen is not currently running, but we are in SSH, so start a session
-#        exec screen -d -R
-#    fi
-#fi
-##
-
-if [[ "$unamestr" == 'Darwin' ]]; then
-#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-    [[ -s "/Users/${USER}/.gvm/bin/gvm-init.sh" ]] && source "/Users/${USER}/.gvm/bin/gvm-init.sh"
-fi 
