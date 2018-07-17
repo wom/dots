@@ -6,80 +6,24 @@ else
         let os=system('uname -s')
 endif
 set backupskip=/tmp/*,/private/tmp/*
-if os != "windows"
-    "" . resolve(expand("%:p")) . "&" . resolve(expand("%:p")) . "&"Vundle stuff...
-    filetype on 
-    filetype off
-    ""
-    " Vundle Setup...
-    "   git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/vundle.git
-    "   Then :PluginInstall
-    set rtp+=~/.vim/vundle.git/
-    call vundle#rc()
-    let $GIT_SSL_NO_VERIFY = 'true'
-    ""
-    " My Bundles:
-    " "
-    " github hosted
-    Bundle 'scrooloose/nerdtree.git'
-    Bundle 'scrooloose/nerdcommenter.git'
-    "Bundle 'vim-scripts/TeTrIs.vim.git'
-    Bundle 'vim-scripts/taglist.vim.git'
-    Bundle 'vim-scripts/matchit.zip'
-    "Bundle 'fholgado/minibufexpl.vim.git'
-    Bundle 'msanders/snipmate.vim.git'
-    "Bundle 'Lokaltog/vim-easymotion'
-    "Bundle 'chrisbra/NrrwRgn.git'
-    Bundle 'vimoutliner/vimoutliner.git'
-    Bundle 'tpope/vim-fugitive'
-    Bundle 'rizzatti/funcoo.vim'
-    "if os == "Darwin"
-        "Mac only..
-        Bundle 'rizzatti/dash.vim'
-    "endif
-    ""
-    "Better autocompleting.
-    "Bundle 'Shougo/neocomplcache.git'
-    "Allows async in neocomplcache
-    "Bundle 'Shougo/vimproc.git'
-    ""
-    "Perl
-    "Bundle 'vim-scripts/perl-support.vim.git'
-    Bundle 'vim-perl/vim-perl'
-    "color scheme.
-    Bundle 'altercation/vim-colors-solarized'
-    ""
-    "vimux setup
-    Bundle 'benmills/vimux.git'
-    "For vimux to work over nfs cleanly; disable warnings. Can do this via
-    "'VERBOSE=nil' in the ruby code somewhere.
-    ""
-    "Powerline is pretty.
-    "Bundle 'Lokaltog/vim-powerline.git'
-    ""
-    "for browser.. not working?
-    "Bundle 'vim-scripts/browser.vim.git'
-    "Bundle 'vim-scripts/synmark.vim.git'
-    ""
-    "
-    "vim-pad crashes me. Why? It looks promising, bug report filed.
-    "Bundle 'fmoralesc/vim-pad.git'
-    "Bundle 'scrooloose/syntastic.git'
-    "Bundle 'vim-scripts/ZoomWin.git'
-    "Bundle 'vim-scripts/AutoComplPop.git'
-    "Bundle 'kien/ctrlp.vim.git'
-    Bundle 'elzr/vim-json'
-    Bundle 'airblade/vim-gitgutter'
-    ""
-    Bundle 'terryma/vim-expand-region'
-    vmap v <Plug>(expand_region_expand)
-    vmap <C-v> <Plug>(expand_region_shrink)
-
-    ""
-    " End my Bundles.
-    ""
-endif
-
+""
+" My Plugins
+" git hosted, run via pack...
+" mkdir -p ~/.vim/pack/git-plugins/start
+" cd ~/.vim/pack/git-plugins/start
+" git clone https://github.com/vimwiki/vimwiki
+" git clone https://github.com/scrooloose/nerdtree
+" git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git
+" git clone https://github.com/scrooloose/nerdcommenter
+" git clone https://github.com/vim-scripts/taglist.vim
+" git clone https://github.com/tpope/vim-fugitive
+" git clone https://github.com/w0rp/ale
+" git clone https://github.com/altercation/vim-colors-solarized
+" git clone https://github.com/maralla/completor.vim
+" git clone https://github.com/airblade/vim-gitgutter
+" git clone https://github.com/ctrlpvim/ctrlp.vim
+" /plugins
+""
 filetype plugin indent on
 autocmd!
 set history=50
@@ -91,20 +35,8 @@ set novisualbell
 set wildmenu
 set cpo-=<
 set wcm=<C-Z>
-if os != "windows"
+
 ""
-"For Powerline
-"set laststatus=2
-"set encoding=utf-8
-"set t_Co=256
-"let g:Powerline_symbols = 'compatible'
-"let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
-"call Pl#Theme#InsertSegment('currhigroup', 'after', 'TARGET_SEGMENT')
-""
-endif
-""
-"test
-"
 map <silent> <A-h> <C-w>< 
 map <silent> <A-j> <C-W>- 
 map <silent> <A-k> <C-W>+ 
@@ -132,7 +64,6 @@ set textwidth=80
 inoremap kj <Esc>
 inoremap jj <Esc>jj
 inoremap kk <Esc>kk
-"inoremap :wq <Esc>:wq
 "set cc=+1
 "/test
 ""
@@ -152,7 +83,6 @@ autocmd BufRead,BufNewFile *.plan     set filetype=perl
 autocmd BufRead,BufNewFile *.stest     set filetype=perl
 ""
 
-:colorscheme torte
 syntax enable
 if os != "windows"
 ""
@@ -164,7 +94,6 @@ set background=dark
 colorscheme solarized
 endif
 "
-":colorscheme desert
 "line numbers... {
 "Relative line numbers
 if (version >= 730)
@@ -297,22 +226,9 @@ let NERDTreeShowBookmarks=1
 "Cleanup Junk
 map <silent> <F3> :call CleanScript()<CR>
 imap <silent> <F3> <C-o><F3>
-"map <silent> <F4> :call SplitschedNDISP()<CR>
-"imap <silent> <F4> <C-o><F4>
 map <silent> <F6> :call StripHostName()<CR>
 imap <silent> <F6> <C-o><F6>
 
-"if version >= 720
-    """"
-    "" Enable AutoComplPop.
-    ""let g:neocomplcache_enable_at_startup = 1
-    ""let g:neocomplcache_use_vimproc = 1
-    ""inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<TAB>"
-    ""inoremap <expr> <C-u> pumvisible() ? neocomplcache#close_popup() : "\<c-u>"
-    ""inoremap <expr> <C-x><C-u> pumvisible() ? \<C-u> : "\<C-u>"
-"else
-    "let g:neocomplcache_enable_at_startup = 0
-"endif
 
 imap <silent> <F9> <C-o><F9>
 
@@ -433,6 +349,7 @@ function! CheckForShebang()
         echo "Not executable file."
     endif
 endfunction
+
 function! CheckForShebangTmux()
     let firstLine= getline(1)
     let fn=@%
@@ -534,9 +451,7 @@ command!          RunMisc            call RunCmdOnFile("")
 command! -nargs=1 TRun               call VimuxRunCommand("clear; " . bufname("%") . <q-args>)
 command!          TRunPerl           call VimuxRunCommand("clear; /usr/bin/perl ". bufname("%"))
 command!          TRunMisc           call VimuxRunCommand("clear; " . bufname("%"))
-command!          CheckPerl          call RunCmdOnFile("/x/eng/localtest/noarch/share/nate/4/last/bin/natelint ")
 command!          CheckPhp           call RunCmdOnFile("/usr/bin/php -l ")
-command!          CheckPy            call RunCmdOnFile("/usr/local/bin/pep8 ")
 ""
 
 
@@ -604,6 +519,7 @@ hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
 " Testing folding..
 set foldmethod=syntax
 set foldlevelstart=1
+let g:vimwiki_folding='syntax'
 
 let javaScript_fold=1         " JavaScript
 let perl_fold=1               " Perl
@@ -613,3 +529,5 @@ let ruby_fold=1               " Ruby
 let sh_fold_enabled=1         " sh
 let vimsyn_folding='af'       " Vim script
 let xml_syntax_folding=1      " XML
+" vimwiki
+ let g:vimwiki_list = [{'auto_toc':1}]
