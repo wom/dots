@@ -14,6 +14,9 @@ fi
 if [ -f ~/scripts/git-completion.bash ]; then
     . ~/scripts/git-completion.bash
 fi
+if [ -f /usr/local/etc/bash_completion.d/poetry.bash-completion ]; then
+    /usr/local/etc/bash_completion.d/poetry.bash-completion
+fi
 
 ##
 # https://github.com/wting/autojump || \
@@ -46,6 +49,9 @@ prevCmd()
         echo $RED
     fi
 }
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
 case $- in
 *i*)    # interactive shell
 	if [ $(tput colors) -gt 0 ] ; then
@@ -53,7 +59,7 @@ case $- in
 		GREEN=$(tput setaf 2)
 		RST=$(tput op)
 	fi
-	export PS1="\[\e[36m\]\u.\h.\W\[\e[0m\]\[\$prevCmd\]>\[$RST\]"
+    export PS1="\[\e[36m\]\u.\h.\W\[\e[0m\]\$(parse_git_branch)\[\033[00m\]\[\$prevCmd\]>\[$RST\]"
     ;;
 *)      # non-interactive shell
     ;;
@@ -96,6 +102,11 @@ alias realpath='readlink -f'
 alias bc='bc -l'
 alias wget='wget -c'
 alias ltmux="if tmux has; then tmux attach; else tmux new; fi"
+alias pc="python -m py_compile "
+alias yc="python -c 'import yaml, sys; print(yaml.safe_load(sys.stdin))' < "
+alias az="/usr/local/bin/az"
+alias kb="kubectl"
+complete  -F __start_kubectl kb # get shell completion
 ##
 #alias startJenk='sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist'
 #alias stopJenk='sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist'
@@ -131,4 +142,13 @@ epoc ()
 {
     perl -e "print scalar(localtime($1))"
     echo ""
+}
+function change-ns() {
+    namespace=$1
+    if [ -z $namespace ]; then
+        echo "Please provide the namespace name: 'change-ns mywebapp'"
+        return 1
+    fi
+
+    kubectl config set-context $(kubectl config current-context) --namespace $namespace
 }

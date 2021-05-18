@@ -12,6 +12,7 @@ set backupskip=/tmp/*,/private/tmp/*
 " mkdir -p ~/.vim/pack/git-plugins/start
 " cd ~/.vim/pack/git-plugins/start
 " git clone https://github.com/vimwiki/vimwiki
+" git clone git://github.com/mattn/calendar-vim
 " git clone https://github.com/scrooloose/nerdtree
 " git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git
 " git clone https://github.com/scrooloose/nerdcommenter
@@ -22,6 +23,10 @@ set backupskip=/tmp/*,/private/tmp/*
 " git clone https://github.com/maralla/completor.vim
 " git clone https://github.com/airblade/vim-gitgutter
 " git clone https://github.com/ctrlpvim/ctrlp.vim
+" git clone https://github.com/Yggdroot/indentLine # 
+" git clone https://github.com/pedrohdz/vim-yaml-folds
+" git clone https://github.com/voldikss/vim-floaterm
+"
 " /plugins
 ""
 filetype plugin indent on
@@ -60,10 +65,15 @@ nmap <silent> <Leader><Tab> :set list!<Bar>:nohlsearch<Bar>:set list?<CR>
 nmap <Backspace><Backspace> :let _s=@/<Bar>:.s/\s\+$//ge<Bar>:let @/=_s<Bar>:nohlsearch<CR>
 "
 ""
-set textwidth=80
-inoremap kj <Esc>
-inoremap jj <Esc>jj
-inoremap kk <Esc>kk
+set textwidth=120
+""
+" Indentline
+ let g:indentLine_char = '⦙'
+""
+" Can be annoying...
+"inoremap kj <Esc>
+"inoremap jj <Esc>jj
+"inoremap kk <Esc>kk
 "set cc=+1
 "/test
 ""
@@ -203,7 +213,7 @@ nnoremap <silent> OD <C-W><
 "nmap <Up> gk
 "nmap <Down> gj
 
-nmap <F10> :qa<CR>
+"nmap <F10> :qa<CR>
 
 "center...
 "nmap <space> zz :set foldcolumn=1
@@ -266,7 +276,10 @@ augroup filters
     autocmd FileType python     map <buffer> <leader>tt :!autopep8  --indent-size 4 --aggressive -<CR>
     autocmd FileType javascript map <buffer> <leader>tt :!uglifyjs -b<CR>
     autocmd FileType json       map <buffer> <leader>tt :!python -mjson.tool<CR>
+    autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 augroup END
+
+
 
 map <leader>cf          :!column -t<CR>
 map <leader>n           :NERDTreeToggle<CR>
@@ -340,6 +353,8 @@ function! CheckForShebang()
         if (match( firstLine , '.*perl.*') == 0)
             "echo "Is perl."
             :RunPerl
+        elseif (match( firstLine , '.*python3.*') == 0)
+            :RunPy3
         elseif (match( firstLine , '.*python.*') == 0)
             :RunPy
         else
@@ -360,14 +375,12 @@ function! CheckForShebangTmux()
     endif
     if (match( firstLine , '^\#!') == 0)
         "echo firstLine
-        if (match( firstLine , '.*perl.*') == 0)
-            "echo "Is perl:".tmux.":"
+        if (match( firstLine , '.*python.*') == 0)
             if tmux
-                :TRunPerl
-                "echo 'inTmux'
+                :TRunPy3
             else
                 "echo 'NotinTmux'
-                :RunPerl
+                :RunPy3
             endif
         else
             ":TRunMisc
@@ -382,7 +395,7 @@ function! CheckForShebangTmux()
     endif
 endfunction
 
-""
+"" tmux needs 'vimux' plugin. Can i check for it dynamically?
 "map <leader>e :call CheckForShebangTmux()<cr>
 map <leader>e :call CheckForShebang()<cr>
 ""
@@ -447,9 +460,11 @@ endfunction
 command! -nargs=1 Run                call RunCmdOnFile(<q-args>)
 command!          RunPerl            call RunCmdOnFile("/usr/bin/perl ")
 command!          RunPy              call RunCmdOnFile("`which python` ")
+command!          RunPy3             call RunCmdOnFile("`which python3` ")
 command!          RunMisc            call RunCmdOnFile("")
 command! -nargs=1 TRun               call VimuxRunCommand("clear; " . bufname("%") . <q-args>)
 command!          TRunPerl           call VimuxRunCommand("clear; /usr/bin/perl ". bufname("%"))
+command!          TRunPy3            call VimuxRunCommand("python3 " . bufname("%"))
 command!          TRunMisc           call VimuxRunCommand("clear; " . bufname("%"))
 command!          CheckPhp           call RunCmdOnFile("/usr/bin/php -l ")
 ""
@@ -516,10 +531,11 @@ hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
 " }}}
 ""
 
-" Testing folding..
+" Folding
 set foldmethod=syntax
 set foldlevelstart=1
-let g:vimwiki_folding='syntax'
+"let g:vimwiki_folding='syntax'
+let g:vimwiki_folding='expr'
 
 let javaScript_fold=1         " JavaScript
 let perl_fold=1               " Perl
@@ -530,4 +546,41 @@ let sh_fold_enabled=1         " sh
 let vimsyn_folding='af'       " Vim script
 let xml_syntax_folding=1      " XML
 " vimwiki
- let g:vimwiki_list = [{'auto_toc':1}]
+ let g:vimwiki_list = [{'auto_toc': 1, 'syntax': 'markdown', 'auto_tags': 1}]
+ let g:vimwiki_use_calendar = 1
+function! ToggleCalendar()
+
+  execute ":Calendar"
+  execute ":set nonumber"
+  execute ":set norelativenumber"
+  "if exists("g:calendar_open")
+    "if g:calendar_open == 1
+      "execute "q"
+      "unlet g:calendar_open
+    "else
+      "g:calendar_open = 1
+    "end
+  "else
+    "let g:calendar_open = 1
+  "end
+endfunction
+:autocmd FileType vimwiki map c :call ToggleCalendar()<CR>
+ 
+"Calendar toggle
+ ""
+ "Ale Config
+ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+ let g:ale_sign_error = '✘'
+ let g:ale_sign_warning = '⚠'
+ let g:ale_lint_on_text_changed = 'never'
+
+ ""
+ " vimspector 
+ let g:vimspector_enable_mappings = 'HUMAN'
+
+ " Testing floatterm..
+ "let g:floaterm_keymap_new = '<Leader>ft'
+ let g:floaterm_keymap_toggle = '<Leader>f'
+ let g:floaterm_keymap_new = '<Leader>d'
+ let g:floaterm_keymap_next = '<Leader>g'
+
