@@ -12,7 +12,7 @@ set backupskip=/tmp/*,/private/tmp/*
 " mkdir -p ~/.vim/pack/git-plugins/start
 " cd ~/.vim/pack/git-plugins/start
 " git clone https://github.com/vimwiki/vimwiki
-" git clone git://github.com/mattn/calendar-vim
+" git clone https://github.com/mattn/calendar-vim
 " git clone https://github.com/scrooloose/nerdtree
 " git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git
 " git clone https://github.com/scrooloose/nerdcommenter
@@ -23,7 +23,7 @@ set backupskip=/tmp/*,/private/tmp/*
 " git clone https://github.com/maralla/completor.vim
 " git clone https://github.com/airblade/vim-gitgutter
 " git clone https://github.com/ctrlpvim/ctrlp.vim
-" git clone https://github.com/Yggdroot/indentLine # 
+" git clone https://github.com/Yggdroot/indentLine 
 " git clone https://github.com/pedrohdz/vim-yaml-folds
 " git clone https://github.com/voldikss/vim-floaterm
 "
@@ -98,7 +98,7 @@ if os != "windows"
 ""
 "Solarized color scheme setup...
 "needed if terminal not setup correctly.
-"let g:solarized_termcolors=256
+" let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 set background=dark
 colorscheme solarized

@@ -1,0 +1,32 @@
+format = "$directory$git_status$git_branch$kubernetes$azure$python$all"
+
+[character]
+success_symbol = "➜(bold green) "
+error_symbol = "➜(bold red) "
+
+[kubernetes]
+format = '[⛵$context\($namespace\)](dimmed green) '
+disabled = false
+
+[azure]
+disabled = false
+format = "[$symbol($subscription)]($style) "
+
+[java]
+disabled = true
+
+[package]
+disabled = true
+
+[status]
+disabled = false
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+
+[python]
+format = '[(\(🐍$virtualenv\))]($style)'
+
+[git_status]
+disabled = true

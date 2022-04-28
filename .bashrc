@@ -28,42 +28,49 @@ elif [ -f ~/.autojump/etc/profile.d/autojump.sh ]; then
 fi
 
 USER=`whoami`
-export PATH="/usr/local/bin:$PATH:~/scripts:~/bin/"
+# Tossing azcli venv *first*
+export PATH="~/venvs/azclivenv/bin/:~/.poetry/bin/:~/scripts:~/bin/:/usr/local/bin:$PATH"
 #save history from all terminals.
 shopt -s histappend
-PROMPT_COMMAND='history -a'
+# If we have Starship - Use it! else use our custom bash prompt
+if command -v starship &> /dev/null
+then
+    eval "$(starship init bash)"
+else
+    PROMPT_COMMAND='history -a'
 
-#####
-# build prompt.
-bash_prompt_command()
-{
-    RTN=$?
-    prevCmd=$(prevCmd $RTN)
-}
-PROMPT_COMMAND=bash_prompt_command
-prevCmd()
-{
-    if [ $1 == 0 ] ; then
-        echo $GREEN
-    else
-        echo $RED
+    #####
+    # build prompt.
+    bash_prompt_command()
+    {
+        RTN=$?
+        prevCmd=$(prevCmd $RTN)
+    }
+    PROMPT_COMMAND=bash_prompt_command
+    prevCmd()
+    {
+        if [ $1 == 0 ] ; then
+            echo $GREEN
+        else
+            echo $RED
+        fi
+    }
+    parse_git_branch() {
+        git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+    }
+    case $- in
+    *i*)    # interactive shell
+        if [ $(tput colors) -gt 0 ] ; then
+            RED=$(tput setaf 1)
+            GREEN=$(tput setaf 2)
+            RST=$(tput op)
+        fi
+        export PS1="\[\e[36m\]\u.\h.\W\[\e[0m\]\$(parse_git_branch)\[\033[00m\]\[\$prevCmd\]>\[$RST\]"
+        ;;
+    *)      # non-interactive shell
+        ;;
+    esac
     fi
-}
-parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
-case $- in
-*i*)    # interactive shell
-	if [ $(tput colors) -gt 0 ] ; then
-		RED=$(tput setaf 1)
-		GREEN=$(tput setaf 2)
-		RST=$(tput op)
-	fi
-    export PS1="\[\e[36m\]\u.\h.\W\[\e[0m\]\$(parse_git_branch)\[\033[00m\]\[\$prevCmd\]>\[$RST\]"
-    ;;
-*)      # non-interactive shell
-    ;;
-esac
 # end build prompt.
 #####
 
@@ -104,7 +111,7 @@ alias wget='wget -c'
 alias ltmux="if tmux has; then tmux attach; else tmux new; fi"
 alias pc="python -m py_compile "
 alias yc="python -c 'import yaml, sys; print(yaml.safe_load(sys.stdin))' < "
-alias az="/usr/local/bin/az"
+#alias az="/usr/local/bin/az"
 alias kb="kubectl"
 complete  -F __start_kubectl kb # get shell completion
 ##
@@ -121,9 +128,6 @@ do
     alias $baseName="cd ${dotSlash}"
 done
 
-
-
-    
 
 #custom ssh aliases..
 source ~/custCon.sh
@@ -152,3 +156,21 @@ function change-ns() {
 
     kubectl config set-context $(kubectl config current-context) --namespace $namespace
 }
+
+# allow single agent to work across all sessions
+export SSH_AUTH_SOCK='~/.ssh/ssh-agent.sock'
+auth ()
+{
+    # startup ssh-agent if not already running; and auth key.
+    RESULT=`pgrep ssh-agent`
+    if [ "${RESULT:-null}" == "null" ]; then
+        echo "${PROCESS} not running, starting "$PROCANDARGS
+        echo 'Starting Agent'
+        eval $(ssh-agent -s -a "${SSH_AUTH_SOCK}")
+    fi
+    ssh-add
+}
+
+# mtu?
+alias mtu='sudo ip link set dev eth0 mtu 1400'
+

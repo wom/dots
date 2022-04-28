@@ -1,10 +1,11 @@
 #!/bin/bash
 
-echo "Symlinking dropbox dot files..."
+echo "Symlinking  dot files..."
 cd 
-dotList='.bashrc .tmux.conf .screenrc .vimrc'
+dotList='.bashrc .tmux.conf .screenrc .vimrc .config/starship.toml'
 dotFold="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "dotFold: ${dotFold}";
+mkdir -p ~/.config
 for dotFile in $dotList; do
     if [ -f ${dotFile} ]; then
 	echo "${dotfile} exists; backing up..";
