@@ -29,7 +29,7 @@ fi
 
 USER=`whoami`
 # Tossing azcli venv *first*
-export PATH="~/venvs/azclivenv/bin/:~/.poetry/bin/:~/scripts:~/bin/:/usr/local/bin:$PATH"
+export PATH="~/venvs/azclivenv/bin/:~/venvs/misctools/.venv/bin/:~/.poetry/bin/:~/scripts:~/bin/:/usr/local/bin:$PATH"
 #save history from all terminals.
 shopt -s histappend
 # If we have Starship - Use it! else use our custom bash prompt
@@ -74,6 +74,17 @@ else
 # end build prompt.
 #####
 
+# This doesn't work for me?
+if command -v keychain &> /dev/null
+then
+    eval `keychain --eval --agents ssh id_rsa`
+    #keychain -q --eval id_rsa
+    #keychain --eval --agents ssh id_rsa
+    #eval `keychain -q --eval id_rsa`
+    #eval `keychain --eval --agents ssh id_rsa`
+    #/usr/bin/keychain -q --nogui $HOME/.ssh/id_rsa
+    #source $HOME/.keychain/$HOSTNAME-sh
+fi
 
 #####
 # misc exports.
@@ -87,6 +98,8 @@ export LESS_TERMCAP_so=$'\E[38;5;246m' # begin standout-mode - info box
 export LESS_TERMCAP_ue=$'\E[0m' # end underline
 export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 export P4DIFF='vim-7.2 -d'
+# Bat theme
+export BAT_THEME='Solarized (dark)'
 #####
 # Misc alias
 alias cpProgress="rsync --progress -ravz"
@@ -94,6 +107,8 @@ alias ping="time ping"
 alias c="clear"
 alias please='sudo'
 alias j=`which autojump`
+alias pyl='PYTHONPATH=. pylint'
+alias pyt='PYTHONPATH=. pytest'
 
 ##
 #Why doesn't this work?
@@ -102,6 +117,7 @@ alias j=`which autojump`
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
+alias bat="batcat"
 alias grep="grep --color=tty -d skip"
 alias hd='od -Ax -tx1z -v'
 alias realpath='readlink -f'
@@ -112,6 +128,8 @@ alias pc="python -m py_compile "
 alias yc="python -c 'import yaml, sys; print(yaml.safe_load(sys.stdin))' < "
 #alias az="/usr/local/bin/az"
 alias kb="kubectl"
+# For this to work, setup system wide kube completions.
+# kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 complete  -F __start_kubectl kb # get shell completion
 ##
 #alias startJenk='sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist'
@@ -157,19 +175,39 @@ function change-ns() {
 }
 
 # allow single agent to work across all sessions
-export SSH_AUTH_SOCK='~/.ssh/ssh-agent.sock'
+#export SSH_AUTH_SOCK='~/.ssh/ssh-agent.sock'
+#auth ()
+#{
+    ## startup ssh-agent if not already running; and auth key.
+    #RESULT=`pgrep ssh-agent`
+    #if [ "${RESULT:-null}" == "null" ]; then
+        #echo "${PROCESS} not running, starting "$PROCANDARGS
+        #echo 'Starting Agent'
+        #eval $(ssh-agent -s -a "${SSH_AUTH_SOCK}")
+    #fi
+    #ssh-add
+#}
 auth ()
 {
-    # startup ssh-agent if not already running; and auth key.
-    RESULT=`pgrep ssh-agent`
-    if [ "${RESULT:-null}" == "null" ]; then
-        echo "${PROCESS} not running, starting "$PROCANDARGS
-        echo 'Starting Agent'
-        eval $(ssh-agent -s -a "${SSH_AUTH_SOCK}")
-    fi
+    eval $(ssh-agent -s)
     ssh-add
 }
 
 # mtu?
 alias mtu='sudo ip link set dev eth0 mtu 1400'
+
+
+# HSTR configuration 
+alias hh=hstr                                     # hh to be alias for hstr
+export HSTR_CONFIG=hicolor,raw-history-view       # get more colors and default to History view.
+shopt -s histappend                               # append new history items to .bash_history
+export HISTCONTROL=ignorespace                    # leading space hides commands from history
+export HISTFILESIZE=10000                         # increase history file size (default is 500)
+export HISTSIZE=${HISTFILESIZE}                   # increase history size (default is 500)
+# ensure synchronization between bash memory and history file
+export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+# if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
+if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
+# if this is interactive shell, then bind 'kill last command' to Ctrl-x k
+if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
 
