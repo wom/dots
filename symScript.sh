@@ -4,7 +4,7 @@ echo "Symlinking  dot files..."
 origDir="$( pwd )"
 (
 cd 
-dotList='.bashrc .tmux.conf .screenrc .vimrc .config/starship.toml'
+dotList='.bashrc .tmux.conf .screenrc .vimrc .config/starship.toml .config/nvim'
 dotFold="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ "${dotFold}" == "$( pwd )" ] ; then
 	dotFold=${origDir}
