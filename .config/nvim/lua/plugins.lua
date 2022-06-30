@@ -8,8 +8,7 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   -- <plugins>
   use 'tpope/vim-fugitive' 
-  -- I need abetter colorscheme
-  -- use 'ishan9299/nvim-solarized-lua' 
+  use "EdenEast/nightfox.nvim" -- color Scheme!
   use {
       'nvim-telescope/telescope.nvim',
       requires = {

@@ -9,8 +9,7 @@ else
 endif
 " Require Plugins
 "" 
-" I need a better colorscheme
-" colorscheme solarized
+colorscheme duskfox
 ""
 " Telescope!
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
@@ -105,9 +104,9 @@ set wildmenu
 nnoremap <silent> OA <C-W>-
 nnoremap <silent> OB <C-W>+
 nnoremap <silent> OC <C-W>>
-n
 noremap <silent> OD <C-W><
 map <leader><space>     :nohlsearch <CR>
+
 function! MyDate()
         let @x = substitute(system("date \"+%A, %B %d %Y\"")."\n","\n"," ", "")
         "let @x = substitute(system("date \"+%A, %B %d %Y\"")."\n   -----------------------------","\n"," ", "")

@@ -77,7 +77,7 @@ else
 
 #####
 # misc exports.
-export EDITOR=vim
+export EDITOR=nvim
 #color man pages.
 export LESS_TERMCAP_mb=$'\E[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\E[01;38;5;74m' # begin bold
@@ -99,7 +99,6 @@ alias j=`which autojump`
 #Why doesn't this work?
 #alias vimdiff="vim-7.3diff"
 ##
-alias g="gvim --remote-silent"
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
