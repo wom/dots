@@ -1,16 +1,21 @@
-lua require('plugins')
-lua require("nvim-tree").setup()
+vim.cmd('set nocompatible')
+require('plugins')
+require("nvim-tree").setup()
+-- settings
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
 
-set nocompatible
+vim.cmd([[
 if has("win32") || has("win16")
         let os="windows"
 else 
         let os=system('uname -s')
 endif
-" Require Plugins
-"" 
 colorscheme duskfox
-""
+set history=50
+set mouse=a
+set showcmd
 " Telescope!
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -32,10 +37,6 @@ set wildmenu
 set cpo-=<
 set wcm=<C-Z>
 highlight TrailingWhitespace ctermbg=red  guibg=red
-
-""
-"Toggle
-"nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 function! NumberToggle()
     "if !empty($TMUX)
         "let tmux=1
@@ -61,35 +62,14 @@ function! NumberToggle()
     endif
 endfunction
 nnoremap <F2> :call NumberToggle()<CR>
-"}
-"
-" GUI Settings {
-if has("gui")
-    set mousehide
-    set guioptions=agimrLt
-    set guioptions-=r
-    set go-=L
-"Copy yanked to clipboard
-"set go+=a
-endif
-" }
-"
-"Tab buffer browsing.
+
+"buffer browsing.
 nnoremap <silent><S-h> :bp<CR>
 nnoremap <silent><S-l> :bn<CR>
 
-"enables highlighting on search.
-"other options: 
-"       'is' incremental search
-"       'ic' ignore case
-set hls
-
-"tab expansion
-set tabstop=4
-set smarttab
-set shiftwidth=4
+""
+" Tab Stuff!
 set shiftround
-set expandtab
 set cursorline
 
 ""
@@ -113,8 +93,6 @@ function! MyDate()
         normal! "xp
 endf
 map <leader><leader>d   :call MyDate()<CR>
-"fix backspace
-:set bs=2
 if os != "windows"
     "preserve swap independently.
     :set dir=~/.vim/swp//
@@ -129,33 +107,7 @@ else
     ":set dir=~\swp\\
     :set clipboard=unnamed
 endif
-
-"View last search results in their own window (Cur file)
-nmap <leader>s :vimgrep /<C-R>//j %<CR>:copen<CR><CR>
-"View last search results in their own window (Cur dir)
-nmap <leader>S :call BufSearch() <cr>
-function! BufSearch()
-    echo @/
-    let g:buflist = ""
-    bufdo let g:buflist.=" ".expand("%:p")
-    execute "vimgrep /".@/."/j ".g:buflist
-    copen
-endfunction
-
-"quick fix toggle.
-command -bang -nargs=? QFix call QFixToggle(<bang>0)
-function! QFixToggle(forced)
-    if exists("g:qfix_win") && a:forced == 0
-        cclose
-        unlet g:qfix_win
-    else
-        copen 10
-        let g:qfix_win = bufnr("$")
-    endif
-endfunction
-
-"Disable whitespace in vimdiff...
-set diffopt+=iwhite
+""
 "DiffOrig Mapping.
 function! DiffOrig()
     if &diff
@@ -165,6 +117,7 @@ function! DiffOrig()
     endif
 endfunction
 map <leader>do :call DiffOrig()<cr>
+
 " Folding
 set foldmethod=syntax
 set foldlevelstart=1
@@ -176,3 +129,4 @@ let ruby_fold=1               " Ruby
 let sh_fold_enabled=1         " sh
 let vimsyn_folding='af'       " Vim script
 let xml_syntax_folding=1      " XML
+]])

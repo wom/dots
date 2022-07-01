@@ -22,6 +22,23 @@ return require('packer').startup(function(use)
       }
   }
   use {
+      'vimwiki/vimwiki',
+      config = function()
+          vim.g.vimwiki_list = {
+              {
+                  path = '~/',
+                  syntax = 'markdown',
+                  ext  = '.md',
+              }
+          }
+          vim.g.vimwiki_ext2syntax = {
+              ['.md'] = 'markdown',
+              ['.markdown'] = 'markdown',
+              ['.mdown'] = 'markdown',
+          }
+      end
+  }
+  use {
       'kyazdani42/nvim-tree.lua',
       requires = {
           'kyazdani42/nvim-web-devicons', -- optional, for file icons

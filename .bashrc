@@ -114,6 +114,7 @@ alias pyt='PYTHONPATH=. pytest'
 #Why doesn't this work?
 #alias vimdiff="vim-7.3diff"
 ##
+alias vi="nvim"
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
