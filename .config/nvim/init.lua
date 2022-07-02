@@ -1,7 +1,8 @@
 vim.cmd('set nocompatible')
 require('plugins')
-require("nvim-tree").setup()
--- settings
+require('wom')
+
+-- settings - Move into wom at some point and migrate to native lua
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
@@ -26,7 +27,7 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>n <cmd>NvimTreeToggle<cr>
 ""
 filetype plugin indent on
-autocmd!
+"autocmd!
 set history=50
 set mouse=a
 set showcmd
@@ -34,18 +35,13 @@ set hidden
 syntax on
 set novisualbell
 set wildmenu
+set wildmode=list:longest,full 
+:set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc
 set cpo-=<
 set wcm=<C-Z>
-highlight TrailingWhitespace ctermbg=red  guibg=red
+"highlight TrailingWhitespace ctermbg=red  guibg=red
+
 function! NumberToggle()
-    "if !empty($TMUX)
-        "let tmux=1
-        "echo "tmux1::".tmux."::"
-    "else
-        "let tmux=0
-        "echo "tmux0"
-    "endif
-    "echo "In Func"
     if (&relativenumber == 1)
         "echo "isRelative"
         :set norelativenumber
@@ -73,18 +69,7 @@ set shiftround
 set cursorline
 
 ""
-"tab completion.
-set wildmode=list:longest,full 
-set wildmenu
-:set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc
 
-"multiple splits
-"nmap + <C-W>+
-"nmap - <C-W>-
-nnoremap <silent> OA <C-W>-
-nnoremap <silent> OB <C-W>+
-nnoremap <silent> OC <C-W>>
-noremap <silent> OD <C-W><
 map <leader><space>     :nohlsearch <CR>
 
 function! MyDate()
@@ -95,20 +80,17 @@ endf
 map <leader><leader>d   :call MyDate()<CR>
 if os != "windows"
     "preserve swap independently.
-    :set dir=~/.vim/swp//
-    if version >= 720
-        "preserve undo independently.
-        :set undodir=~/.vim/undodir//
-        :set undofile
-        :set undolevels=1000
-        :set undoreload=10000
-    endif
+    :set dir=~/.cache/nvim/swp//
+    "preserve undo independently.
+    :set undodir=~/.cache/nvim/undodir//
+    :set undofile
+    :set undolevels=1000
+    :set undoreload=10000
 else
-    ":set dir=~\swp\\
     :set clipboard=unnamed
 endif
+
 ""
-"DiffOrig Mapping.
 function! DiffOrig()
     if &diff
         wincmd p | bdel | diffoff
