@@ -35,6 +35,16 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     -- vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
     vim.keymap.set('n', '<leader>tt', vim.lsp.buf.format, bufopts)
+
+    -- Code Runner
+    vim.keymap.set('n', '<leader>e', ':RunCode<CR>', bufopts)
+    vim.keymap.set('n', '<leader>ef', ':RunFile<CR>', bufopts)
+    vim.keymap.set('n', '<leader>eft', ':RunFile tab<CR>', bufopts)
+    vim.keymap.set('n', '<leader>ep', ':RunProject<CR>', bufopts)
+    vim.keymap.set('n', '<leader>ec', ':RunClose<CR>', bufopts)
+    vim.keymap.set('n', '<leader>crf', ':CRFiletype<CR>', bufopts)
+    vim.keymap.set('n', '<leader>crp', ':CRProjects<CR>', bufopts)
+--
 end
 
 local lsp_flags = {

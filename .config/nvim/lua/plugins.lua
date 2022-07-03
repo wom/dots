@@ -8,7 +8,6 @@ local function load_plugins0()
   require('packer').startup {
     {
       'wbthomason/packer.nvim',
-      'neovim/nvim-lspconfig',
     },
     config = {
       package_root = package_root,
@@ -58,18 +57,24 @@ local function load_plugins()
             },
             tag = 'nightly' -- optional, updated every week. (see issue #1193)
         }
-        -- Native LSP
-        use "neovim/nvim-lspconfig"
-        use "hrsh7th/nvim-cmp"
-        use "hrsh7th/cmp-buffer"
-        use "hrsh7th/cmp-path"
-        use "hrsh7th/cmp-nvim-lsp"
+        -- Native LSP stuffs
+        use {
+            "williamboman/nvim-lsp-installer",
+            "neovim/nvim-lspconfig",
+            "hrsh7th/nvim-cmp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-nvim-lsp"
+        }
+        -- Code commenter 
         use {
             'numToStr/Comment.nvim',
             config = function()
                 require('Comment').setup()
             end
         }
+        -- Code Runner
+        use { 'CRAG666/code_runner.nvim', requires = 'nvim-lua/plenary.nvim' }
         -- </plugins>
         if packer_bootstrap then
             require('packer').sync()
@@ -109,17 +114,34 @@ _G.load_config = function()
     vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
     vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
     vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+    ----
+    --
   end
 
   local name = 'pyright'
   local cmd = { 'pyright-langserver', '--stdio' } -- needed for elixirls, omnisharp, sumneko_lua
-
+  -- Before setting up servers; set it up to install them!
+  require("nvim-lsp-installer").setup {}
+  -- LspInstallInfo  for overview of available language servers.
+  -- LSP logs exist under $HOME/.cache/nvim/lsp.log.
   nvim_lsp[name].setup {
     cmd = cmd,
     on_attach = on_attach,
   }
+  nvim_lsp['sumneko_lua'].setup { }
 
--- LSP logs exist under $HOME/.cache/nvim/lsp.log.
+  -- Code Runner
+  require('code_runner').setup({
+      -- put here the commands by filetype
+      mode = 'toggle',
+      focus = false,
+      filetype = {
+          bash = "bash",
+          lua = "lua",
+          python = "python3 -u",
+          rust = "cd $dir && rustc $fileName && $dir/$fileNameWithoutExt"
+      },
+  })
    -- print [[ Config Loaded ]]
 end
 
