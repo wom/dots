@@ -29,7 +29,9 @@ local function load_plugins()
                     'BurntSushi/ripgrep',
                     'sharkdp/fd',
                     'nvim-treesitter/nvim-treesitter',
-                    'kyazdani42/nvim-web-devicons'
+                    'kyazdani42/nvim-web-devicons',
+                    "nvim-telescope/telescope-file-browser.nvim",
+                    "nvim-telescope/telescope-project.nvim"
                 }
             }
         }
@@ -60,11 +62,12 @@ local function load_plugins()
         -- Native LSP stuffs
         use {
             "williamboman/nvim-lsp-installer",
-            "neovim/nvim-lspconfig",
-            "hrsh7th/nvim-cmp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-nvim-lsp"
+            "neovim/nvim-lspconfig"
+            -- eventually I want code completion stuff
+            -- "hrsh7th/nvim-cmp",
+            -- "hrsh7th/cmp-buffer",
+            -- "hrsh7th/cmp-path",
+            -- "hrsh7th/cmp-nvim-lsp"
         }
         -- Code commenter 
         use {
@@ -75,6 +78,8 @@ local function load_plugins()
         }
         -- Code Runner
         use { 'CRAG666/code_runner.nvim', requires = 'nvim-lua/plenary.nvim' }
+        -- Startup Screen!
+        use {'glepnir/dashboard-nvim'}
         -- </plugins>
         if packer_bootstrap then
             require('packer').sync()
@@ -83,10 +88,8 @@ local function load_plugins()
    -- print [[ Plugins Loaded ]]
 end
 _G.load_config = function()
-  vim.lsp.set_log_level 'trace'
-  if vim.fn.has 'nvim-0.5.1' == 1 then
-    require('vim.lsp.log').set_format_func(vim.inspect)
-  end
+  -- Uncomment for more detailed info
+  -- vim.lsp.set_log_level 'trace'
   local nvim_lsp = require 'lspconfig'
   local on_attach = function(_, bufnr)
     local function buf_set_option(...)
@@ -142,6 +145,22 @@ _G.load_config = function()
           rust = "cd $dir && rustc $fileName && $dir/$fileNameWithoutExt"
       },
   })
+  -- Telescope Plugins
+  require('telescope').setup {
+      extensions = {
+          project = {
+              base_dirs = {
+                  '~/src/AoC',
+                  '~/src/scratch'
+              },
+              hidden_files = false, -- default: false
+              theme = "dropdown",
+              display_type = "full"
+          }
+      }
+  }
+  require("telescope").load_extension("file_browser")
+  require("telescope").load_extension("project")
    -- print [[ Config Loaded ]]
 end
 
