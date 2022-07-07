@@ -1,6 +1,6 @@
 vim.cmd('set nocompatible')
 require('plugins')
-require('wom')
+require('setup')
 
 -- settings - Move into wom at some point and migrate to native lua
 vim.opt.expandtab = true
