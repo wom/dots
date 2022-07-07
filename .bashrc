@@ -115,8 +115,10 @@ alias pyt='PYTHONPATH=. pytest'
 alias vimdiff="nvim -d"
 alias vidiff="nvim -d"
 alias nvimdiff="nvim -d"
+alias nvremote='nvim --headless --listen localhost:6666'
 ##
 alias vi="nvim"
+alias grep="rg"
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"

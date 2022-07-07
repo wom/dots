@@ -41,13 +41,14 @@ local function load_plugins()
             config = function()
                 vim.g.vimwiki_list = {
                     {
-                        path = '~/',
+                        path = '~/vimwiki',
                         syntax = 'markdown',
-                        ext  = '.md',
+                        ext  = '.wiki',
                     }
                 }
                 vim.g.vimwiki_ext2syntax = {
                     ['.md'] = 'markdown',
+                    ['.wiki'] = 'markdown',
                     ['.markdown'] = 'markdown',
                     ['.mdown'] = 'markdown',
                 }
@@ -83,6 +84,23 @@ local function load_plugins()
         use {'glepnir/dashboard-nvim'}
         -- Session/Workspace Management!
         use {'natecraddock/workspaces.nvim'}
+        -- Status Line
+        use {
+            'nvim-lualine/lualine.nvim',
+            requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+        }
+        -- breadcrumbs! Why doesn't it work in pylance?
+        use {
+            "SmiteshP/nvim-navic",
+            requires = "neovim/nvim-lspconfig"
+        }
+        -- Buffers @ top
+        use {
+            'akinsho/bufferline.nvim',
+            tag = "v2.*",
+            requires = 'kyazdani42/nvim-web-devicons'
+        }
+        
         -- </plugins>
         if packer_bootstrap then
             require('packer').sync()
@@ -94,13 +112,16 @@ _G.load_config = function()
     -- Uncomment for more detailed info
     -- vim.lsp.set_log_level 'trace'
     local nvim_lsp = require 'lspconfig'
-    local on_attach = function(_, bufnr)
+    local on_attach = function(client, bufnr)
         local function buf_set_option(...)
             vim.api.nvim_buf_set_option(bufnr, ...)
         end
 
         buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
+        -- status line/breadcrubs
+        -- ToDo: This doesn't seem to work?
+        require("nvim-navic").attach(client, bufnr)
         -- Mappings.
         local opts = { buffer = bufnr, noremap = true, silent = true }
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
@@ -124,17 +145,18 @@ _G.load_config = function()
         --
     end
 
-    local name = 'pyright'
     local cmd = { 'pyright-langserver', '--stdio' } -- needed for elixirls, omnisharp, sumneko_lua
     -- Before setting up servers; set it up to install them!
     require("nvim-lsp-installer").setup {}
     -- LspInstallInfo  for overview of available language servers.
     -- LSP logs exist under $HOME/.cache/nvim/lsp.log.
-    nvim_lsp[name].setup {
+    nvim_lsp['pyright'].setup {
         cmd = cmd,
         on_attach = on_attach,
     }
-    nvim_lsp['sumneko_lua'].setup { }
+    nvim_lsp['sumneko_lua'].setup {
+       --  on_attach = on_attach,
+    }
 
     -- Code Runner
     require('code_runner').setup({
@@ -153,8 +175,9 @@ _G.load_config = function()
         extensions = {
             project = {
                 base_dirs = {
-                    '~/src/AoC',
-                    '~/src/scratch'
+                    '~/src/src1,
+                    '~/src/src2,
+
                 },
                 hidden_files = false, -- default: false
                 theme = "dropdown",
@@ -169,6 +192,23 @@ _G.load_config = function()
         hooks = {
             open = {'Telescope file_browser'},
         },
+    }
+    -- Status line
+    local navic = require("nvim-navic")
+    require('lualine').setup({
+        sections = {
+            lualine_c = {
+                { navic.get_location, cond = navic.is_available },
+            }
+        }
+    })
+
+    -- Buffers @ top
+    vim.opt.termguicolors = true
+    require("bufferline").setup {
+        options = {
+            offsets = {{filetype = "NvimTree", text = "File Explorer"}},
+        }
     }
     -- print [[ Config Loaded ]]
 end
