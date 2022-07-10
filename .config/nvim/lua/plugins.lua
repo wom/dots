@@ -51,14 +51,15 @@ local function load_plugins()
         }
         -- Native LSP stuffs
         use {
-            "williamboman/nvim-lsp-installer",
-            "neovim/nvim-lspconfig"
-            -- eventually I want code completion stuff
-            -- "hrsh7th/nvim-cmp",
-            -- "hrsh7th/cmp-buffer",
-            -- "hrsh7th/cmp-path",
-            -- "hrsh7th/cmp-nvim-lsp"
+            "williamboman/nvim-lsp-installer", -- lets nvim manage local LSPs
+            "neovim/nvim-lspconfig", -- native LSP
+            "hrsh7th/nvim-cmp", -- autocompletion framework
+            "hrsh7th/cmp-nvim-lsp", -- LSP Autocompletion provider
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-buffer",
+            "L3MON4D3/LuaSnip" -- snippets!
         }
+        
         -- Code commenter 
         use {
             'numToStr/Comment.nvim',
@@ -84,10 +85,12 @@ local function load_plugins()
         }
         -- Buffers @ top
         use {
-            'akinsho/bufferline.nvim',
+            "akinsho/bufferline.nvim",
             tag = "v2.*",
             requires = 'kyazdani42/nvim-web-devicons'
         }
+        -- ... copilot?
+        use { "github/copilot.vim" }
         -- </plugins>
         if packer_bootstrap then
             require('packer').sync()

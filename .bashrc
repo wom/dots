@@ -89,6 +89,7 @@ fi
 #####
 # misc exports.
 export EDITOR=nvim
+export MANPAGER='nvim --clean +Man!'
 #color man pages.
 export LESS_TERMCAP_mb=$'\E[01;31m' # begin blinking
 export LESS_TERMCAP_md=$'\E[01;38;5;74m' # begin bold
@@ -110,12 +111,12 @@ alias pyl='PYTHONPATH=. pylint'
 alias pyt='PYTHONPATH=. pytest'
 
 ##
-#Why doesn't this work?
-#alias vimdiff="vim-7.3diff"
 alias vimdiff="nvim -d"
 alias vidiff="nvim -d"
 alias nvimdiff="nvim -d"
 alias nvremote='nvim --headless --listen localhost:6666'
+# assumes plugin installed.
+alias gl="vi -c 'Gclog'"
 ##
 alias vi="nvim"
 alias grep="rg"
@@ -216,3 +217,4 @@ if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
 # if this is interactive shell, then bind 'kill last command' to Ctrl-x k
 if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
 
+. "$HOME/.cargo/env"
