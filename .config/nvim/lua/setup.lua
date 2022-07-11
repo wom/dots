@@ -8,7 +8,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, gopts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, gopts)
 -- Coderunner
 vim.keymap.set('n', '<leader>e', ':RunFile<CR>', gopts)
-
+-- accept copilot - move it off Tab?
+--vim.cmd('imap <silent><script><expr> <C-P> copilot#Accept("")')
+--vim.cmd('let g:copilot_no_tab_map = v:true')
 
 _G.load_config = function()
     -- Uncomment for more detailed info
@@ -161,6 +163,7 @@ _G.load_config = function()
         focus = false,
         filetype = {
             bash = "bash",
+            sh= "bash",
             lua = "lua",
             python = "python3 -u",
             rust = "cd $dir && rustc $fileName && $dir/$fileNameWithoutExt"
