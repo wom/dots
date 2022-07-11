@@ -1,11 +1,13 @@
 -- Global keymappings. Pull into own file?
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local gopts = { noremap=true, silent=true }
+-- Awesome diagnostics
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, gopts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, gopts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, gopts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, gopts)
-
+-- Coderunner
+vim.keymap.set('n', '<leader>e', ':RunFile<CR>', gopts)
 
 
 _G.load_config = function()
@@ -155,7 +157,7 @@ _G.load_config = function()
     -- Code Runner
     require('code_runner').setup({
         -- put here the commands by filetype
-        mode = 'toggle',
+        mode = 'term',
         focus = false,
         filetype = {
             bash = "bash",
