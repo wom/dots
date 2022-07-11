@@ -72,44 +72,56 @@ _G.load_config = function()
 
     -- autocomplete!
     -- Not sure if this luasnip stuff is OK.
-    local has_words_before = function()
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-    end
     local cmp = require 'cmp'
     local luasnip = require("luasnip")
     cmp.setup {
-        mapping = {
-            ["<Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item()
-                elseif luasnip.expand_or_jumpable() then
-                    luasnip.expand_or_jump()
-                elseif has_words_before() then
-                    cmp.complete()
-                else
-                    fallback()
-                end
-            end, { "i", "s" }),
-
-            ["<S-Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item()
-                elseif luasnip.jumpable(-1) then
-                    luasnip.jump(-1)
-                else
-                    fallback()
-                end
-            end, { "i", "s" }),
-            ['<CR>'] = cmp.mapping.confirm({
-                behavior = cmp.ConfirmBehavior.Replace,
-                select = true,
-            })
-        },
         sources = {
             { name = 'nvim_lsp' },
         }
     }
+    luasnip.config.setup {
+        -- This tells LuaSnip to remember to keep around the last snippet.
+        -- You can jump back into it even if you move outside of the selection
+        history = true,
+
+        -- This one is cool cause if you have dynamic snippets, it updates as you type!
+        -- gives me errs.
+        updateevents = "TextChanged,TextChangedI",
+
+        -- Autosnippets:
+        enable_autosnippets = true,
+    }
+    -- <c-k> is my expansion key
+    -- this will expand the current item or jump to the next item within the snippet.
+    vim.keymap.set({ "i", "s" }, "<c-k>", function()
+        if luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+        end
+    end, { silent = true })
+
+    -- <c-j> is my jump backwards key.
+    -- this always moves to the previous item within the snippet
+    vim.keymap.set({ "i", "s" }, "<c-j>", function()
+        if luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+        end
+    end, { silent = true })
+
+    -- <c-l> is selecting within a list of options.
+    -- This is useful for choice nodes (introduced in the forthcoming episode 2)
+    vim.keymap.set("i", "<c-l>", function()
+        if luasnip.choice_active() then
+            luasnip.change_choice(1)
+        end
+    end)
+
+    --vim.keymap.set("i", "<c-u>", require "luasnip.extras.select_choice")  What is this?kkkkkkkkkkkkkkkkkkkk
+
+    -- shorcut to source my luasnips file again, which will reload my snippets - pathing
+    -- vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>")
+    require("luasnip.loaders.from_vscode").lazy_load() -- Loads FriendlySnippets 
+
+    -- /end neosnip
 
     -- Tree Browser 
     require("nvim-tree").setup()

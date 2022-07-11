@@ -59,6 +59,8 @@ local function load_plugins()
             "hrsh7th/cmp-buffer",
             "L3MON4D3/LuaSnip" -- snippets!
         }
+        -- snippets, not lua based...
+        use { "rafamadriz/friendly-snippets" }
         
         -- Code commenter 
         use {
