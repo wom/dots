@@ -61,14 +61,8 @@ local function load_plugins()
         }
         -- snippets, not lua based...
         use { "rafamadriz/friendly-snippets" }
-        
-        -- Code commenter 
-        use {
-            'numToStr/Comment.nvim',
-            config = function()
-                require('Comment').setup()
-            end
-        }
+        -- Code commenter - this seems wonk
+        use { 'numToStr/Comment.nvim' }
         -- Code Runner
         use { 'CRAG666/code_runner.nvim', requires = 'nvim-lua/plenary.nvim' }
         -- Startup Screen!
@@ -91,11 +85,15 @@ local function load_plugins()
             tag = "v2.*",
             requires = 'kyazdani42/nvim-web-devicons'
         }
-        -- ... copilot?
+        -- ... copilot? CoPilot!
         use { "github/copilot.vim" }
+        -- Debugger!
+        use { "mfussenegger/nvim-dap" }
+        use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+        use { "mfussenegger/nvim-dap-python", requires = {"mfussenegger/nvim-dap"}  }
         -- </plugins>
         if packer_bootstrap then
-            require('packer').sync()
+            require("packer").sync()
         end
     end)
     -- print [[ Plugins Loaded ]]
