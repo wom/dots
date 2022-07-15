@@ -6,6 +6,7 @@ require('setup')
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
+vim.o.guifont = "FiraCode NF:h8"
 
 vim.cmd([[
 if has("win32") || has("win16")
