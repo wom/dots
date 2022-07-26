@@ -51,8 +51,8 @@ local function load_plugins()
         }
         -- Native LSP stuffs
         use {
-            "williamboman/nvim-lsp-installer", -- lets nvim manage local LSPs
-            "neovim/nvim-lspconfig", -- native LSP
+            "williamboman/mason.nvim", -- lets nvim manage local LSPs/etc
+            "williamboman/mason-lspconfig.nvim",
             "hrsh7th/nvim-cmp", -- autocompletion framework
             "hrsh7th/cmp-nvim-lsp", -- LSP Autocompletion provider
             "hrsh7th/cmp-path",

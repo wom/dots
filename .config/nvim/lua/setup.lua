@@ -58,8 +58,22 @@ end
 
 local cmd = { 'pyright-langserver', '--stdio' } -- needed for elixirls, omnisharp, sumneko_lua
 -- Before setting up servers; set it up to install them!
-require("nvim-lsp-installer").setup {}
--- LspInstallInfo  for overview of available language servers.
+require("mason").setup {
+    ui = {
+        icons = {
+            package_installed = "✓"
+        }
+    }
+}
+require("mason-lspconfig").setup {
+    ensure_installed = {
+        "sumneko_lua",
+        "pyright",
+        "debugpy",
+        "shellcheck"
+    },
+}
+-- :Mason for overview of available language servers/linters/formatters/etc
 -- LSP logs exist under $HOME/.cache/nvim/lsp.log.
 local lsp_flags = {
     -- This is the default in Nvim 0.7+
@@ -217,7 +231,7 @@ require("bufferline").setup {
 }
 -- DAP!
 -- Requires that debugpy is installed in specified interpreter.
-require('dap-python').setup('~/venvs/debugpy/bin/python')
+require('dap-python').setup('~/.local/share/nvim/mason/packages/debugpy/venv/bin/python')
 require("dapui").setup()
 local dap, dapui = require("dap"), require("dapui")
 dap.listeners.after.event_initialized["dapui_config"] = function()
