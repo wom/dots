@@ -201,6 +201,12 @@ auth ()
 
 # mtu?
 alias mtu='sudo ip link set dev eth0 mtu 1400'
+function wsl() {
+    sudo bash <<"EOF"
+ip link set dev eth0 mtu 1400
+hwclock -s
+EOF
+}
 
 
 # HSTR configuration 
