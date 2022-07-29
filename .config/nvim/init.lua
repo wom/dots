@@ -1,12 +1,9 @@
 vim.cmd('set nocompatible')
 require('plugins')
 require('setup')
+require('settings').load_settings()
 
 -- settings - Move into wom at some point and migrate to native lua
-vim.opt.expandtab = true
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = 4
-vim.o.guifont = "FiraCode NF:h8"
 
 vim.cmd([[
 if has("win32") || has("win16")
@@ -14,10 +11,6 @@ if has("win32") || has("win16")
 else 
         let os=system('uname -s')
 endif
-colorscheme duskfox
-set history=50
-set mouse=a
-set showcmd
 " Telescope!
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fn <cmd>Telescope file_browser<cr>
@@ -30,9 +23,6 @@ nnoremap <leader>n <cmd>NvimTreeToggle<cr>
 ""
 filetype plugin indent on
 "autocmd!
-set history=50
-set mouse=a
-set showcmd
 set hidden
 syntax on
 set novisualbell
