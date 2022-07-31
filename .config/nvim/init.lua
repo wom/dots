@@ -2,6 +2,7 @@ vim.cmd('set nocompatible')
 require('plugins')
 require('setup')
 require('settings').load_settings()
+require('keymaps')
 
 -- settings - Move into wom at some point and migrate to native lua
 
