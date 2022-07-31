@@ -93,6 +93,21 @@ local function load_plugins()
         use { "mfussenegger/nvim-dap-python", requires = {"mfussenegger/nvim-dap"}  }
         -- Whichkey! popups
         use { "folke/which-key.nvim" }
+        -- UT Runner!
+        use {
+            "nvim-neotest/neotest",
+            requires = {
+                "nvim-lua/plenary.nvim",
+                "nvim-treesitter/nvim-treesitter",
+                "antoinemadec/FixCursorHold.nvim",
+                "nvim-neotest/neotest-python",
+
+            }
+        }
+	-- terminal toggles!
+	use {"akinsho/toggleterm.nvim"}
+	-- Magma for jupyter integration
+	-- use { 'dccsillag/magma-nvim' }
         -- </plugins>
         if packer_bootstrap then
             require("packer").sync()
