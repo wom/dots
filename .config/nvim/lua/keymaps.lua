@@ -1,11 +1,15 @@
 local vkms = vim.keymap.set
 
--- magma (If we install jupyter/etc in local venv..
-vkms("n", "<Leader>mi", "<cmd>MagmaInit<CR>")
-vkms("n", "<Leader>ml", "<cmd>MagmaEvaluateLine<CR>")
-vkms("v", "<Leader>m<CR>", ":<C-u>MagmaEvaluateVisual<CR>")
-vkms("n", "<Leader>mc", "<cmd>MagmaReevaluateCell<CR>")
-vkms("n", "<Leader>m<CR>", "<cmd>MagmaShowOutput<CR>")
+-- -- magma (If we install jupyter/etc in local venv..
+-- vkms("n", "<Leader>mi", "<cmd>MagmaInit<CR>")
+-- vkms("n", "<Leader>ml", "<cmd>MagmaEvaluateLine<CR>")
+-- vkms("v", "<Leader>m<CR>", ":<C-u>MagmaEvaluateVisual<CR>")
+-- vkms("n", "<Leader>mc", "<cmd>MagmaReevaluateCell<CR>")
+-- vkms("n", "<Leader>m<CR>", "<cmd>MagmaShowOutput<CR>")
+
+-- lsp
+vkms("n", "<Leader>lo", "<cmd>LspStop<CR>")
+vkms("n", "<Leader>ls", "<cmd>LspStart<CR>")
 
 -- neotest
 vkms("n", "<Leader>tt", function() require("neotest").run.run(vim.fn.expand("%")) end)

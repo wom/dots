@@ -70,6 +70,7 @@ require("mason-lspconfig").setup {
         "sumneko_lua",
         "pyright",
         "debugpy",
+        "marksman",
         "shellcheck"
     },
 }
@@ -94,19 +95,12 @@ nvim_lsp['sumneko_lua'].setup {
         }
     }
 }
+-- These likely need better config
+nvim_lsp['dockerls'].setup { }
+nvim_lsp['bashls'].setup { }
+nvim_lsp['yamlls'].setup { }
+nvim_lsp['marksman'].setup { }
 
-nvim_lsp['dockerls'].setup {
-    cmd = cmd,
-    on_attach = on_attach,
-}
-nvim_lsp['bashls'].setup {
-    cmd = cmd,
-    on_attach = on_attach,
-}
-nvim_lsp['yamlls'].setup {
-    cmd = cmd,
-    on_attach = on_attach,
-}
 
 -- autocomplete!
 -- Not sure if this luasnip stuff is OK.
