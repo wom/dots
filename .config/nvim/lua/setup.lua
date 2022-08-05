@@ -8,9 +8,19 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, gopts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, gopts)
 -- Coderunner
 vim.keymap.set('n', '<leader>e', ':RunFile<CR>', gopts)
--- accept copilot - move it off Tab?
---vim.cmd('imap <silent><script><expr> <C-P> copilot#Accept("")')
---vim.cmd('let g:copilot_no_tab_map = v:true')
+-----
+-- GitHub Copilot
+-- Disable for unknown filetypes
+vim.g.copilot_filetypes = {
+    ["*"] = false,
+    python = true,
+    lua = true,
+    bash = true,
+    rust = true,
+    html = true,
+    javascript = true,
+}
+-----
 
 -- Uncomment for more detailed info
 -- vim.lsp.set_log_level 'trace'
@@ -368,12 +378,9 @@ wkey.register({
     --   t = "Find treesitter",
     --   w = "Find word under cursor",
     },
-    m = {
-      name = "magma",
-    },
     q = { -- Figure out how to implement this
       name = "quickfix",
-    --   q = "Toggle",
+      q = "Toggle",
     --   e = "Edit",
     },
     t = {
