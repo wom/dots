@@ -1,3 +1,7 @@
+if not require('utils').isModuleAvailable('which-key') then
+    --- Only import if available; allows clean bootstrapping.
+    return
+end
 local wkey = require("which-key")
 wkey.setup {
     plugins = {
