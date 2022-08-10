@@ -114,6 +114,9 @@ require('packer').startup(function(use)
     }
     -- terminal toggles!
     use {"akinsho/toggleterm.nvim"}
+
+    -- Harpooooon
+    use {'ThePrimeagen/harpoon', requires = {"nvim-lua/plenary.nvim"}}
     -- </plugins>
     if packer_bootstrap then
         require("packer").sync()

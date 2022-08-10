@@ -28,3 +28,7 @@ vkms("n", "<Leader>tv", "<cmd>ToggleTerm direction=vertical<CR>")
 vkms("n", "]q", "<cmd>cn<CR>")
 vkms("n", "[q", "<cmd>cp<CR>")
 vkms("n", "<Leader>qq", require("utils").toggle_quickfix)
+
+-- Harpoon!
+vkms("n", "<Leader><leader>ha", function() require("harpoon.mark").add_file() end)
+vkms("n", "<Leader>hh", function() require("harpoon.ui").toggle_quick_menu() end)

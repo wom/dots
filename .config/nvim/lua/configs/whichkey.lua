@@ -99,7 +99,12 @@ wkey.register({
     --   t = "Find treesitter",
     --   w = "Find word under cursor",
     },
-    q = { -- Figure out how to implement this
+    h = {
+      name = "Harpoon",
+      a = "Harpoon Add",
+      h = 'Harpoon List',
+    },
+    q = {
       name = "Quickfix",
       q = "Toggle",
     --   e = "Edit",
