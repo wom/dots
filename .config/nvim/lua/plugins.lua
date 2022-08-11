@@ -101,6 +101,12 @@ require('packer').startup(function(use)
         config = conf('whichkey')
     }
 
+    -- Pretty Nootifications
+    use {
+        "rcarriga/nvim-notify",
+        config = conf('notify')
+    }
+
     -- UT Runner!
     use {
         "nvim-neotest/neotest",
