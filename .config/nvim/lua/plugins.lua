@@ -66,8 +66,11 @@ require('packer').startup(function(use)
     use { "rafamadriz/friendly-snippets" }
     -- Code commenter - this seems wonk
     use { 'numToStr/Comment.nvim' }
-    -- Code Runner
-    use { 'CRAG666/code_runner.nvim', requires = 'nvim-lua/plenary.nvim' }
+    -- Code Runner - Not a huuuuge fan, trying others.
+    -- use { 'CRAG666/code_runner.nvim', requires = 'nvim-lua/plenary.nvim' }
+    use { 'stevearc/overseer.nvim',
+      config = conf('overseer')
+    }
     -- Startup Screen!
     use {'glepnir/dashboard-nvim'}
     -- Session/Workspace Management!

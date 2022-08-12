@@ -32,3 +32,18 @@ vkms("n", "<Leader>qq", require("utils").toggle_quickfix)
 -- Harpoon!
 vkms("n", "<Leader><leader>ha", function() require("harpoon.mark").add_file() end)
 vkms("n", "<Leader>hh", function() require("harpoon.ui").toggle_quick_menu() end)
+
+--overseer!
+--
+vkms("n", "<Leader>oo", "<cmd>OverseerToggle<CR>")
+vkms("n", "<Leader>ol", "<cmd>OverseerLoadBundle<CR>")
+vkms("n", "<Leader>or", "<cmd>OverseerRun<CR>")
+vkms("n", "<Leader>e", function()
+    local overseer = require("overseer")
+    overseer.run_template({name = "Runner"}, function(task)
+        if task then
+            overseer.run_action(task, 'open float')
+            -- overseer.run_action(task, 'open hsplit')
+        end
+    end)
+end)

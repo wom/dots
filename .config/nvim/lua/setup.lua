@@ -7,7 +7,7 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, gopts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, gopts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, gopts)
 -- Coderunner
-vim.keymap.set('n', '<leader>e', ':RunFile<CR>', gopts)
+-- vim.keymap.set('n', '<leader>e', ':RunFile<CR>', gopts)
 -----
 -- GitHub Copilot
 -- Disable for unknown filetypes
@@ -195,18 +195,18 @@ db.custom_center = {
 
 
 -- Code Runner
-require('code_runner').setup({
-    -- put here the commands by filetype
-    mode = 'term',
-    focus = false,
-    filetype = {
-        bash = "bash",
-        sh= "bash",
-        lua = "lua",
-        python = "python3 -u",
-        rust = "cd $dir && rustc $fileName && $dir/$fileNameWithoutExt"
-    },
-})
+-- require('code_runner').setup({
+--     -- put here the commands by filetype
+--     mode = 'term',
+--     focus = false,
+--     filetype = {
+--         bash = "bash",
+--         sh= "bash",
+--         lua = "lua",
+--         python = "python3 -u",
+--         rust = "cd $dir && rustc $fileName && $dir/$fileNameWithoutExt"
+--     },
+-- })
 -- Telescope Plugins
 require('telescope').setup {
     extensions = {
