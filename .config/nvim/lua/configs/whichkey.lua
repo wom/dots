@@ -104,6 +104,13 @@ wkey.register({
       a = "Harpoon Add",
       h = 'Harpoon List',
     },
+    l = {
+      name = "LSP/Formatting",
+      f = "autopep8 Format; accepts range.",
+    },
+    o = {
+      name = "Overseer (Task Runner)",
+    },
     q = {
       name = "Quickfix",
       q = "Toggle",

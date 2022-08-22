@@ -16,6 +16,8 @@ null_ls.setup({
     }),
     null_ls.builtins.formatting.isort,
     null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.yamllint,
+    null_ls.builtins.formatting.autopep8,
     -- null_ls.builtins.formatting.black, -- One Day.
   },
 })

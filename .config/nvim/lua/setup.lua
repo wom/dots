@@ -95,6 +95,7 @@ nvim_lsp['pyright'].setup {
     on_attach = on_attach,
     flags = lsp_flags,
 }
+
 nvim_lsp['sumneko_lua'].setup {
     on_attach = on_attach,
     settings = {
@@ -105,6 +106,7 @@ nvim_lsp['sumneko_lua'].setup {
         }
     }
 }
+
 -- These likely need better config
 nvim_lsp['dockerls'].setup { }
 nvim_lsp['bashls'].setup { }

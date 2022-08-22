@@ -5,6 +5,8 @@ vkms("n", "<Leader>lo", "<cmd>LspStop<CR>")
 vkms("n", "<Leader>ls", "<cmd>LspStart<CR>")
 vkms("n", "<Leader>lr", "<cmd>LspRestart<CR>")
 vkms("n", "<Leader>li", "<cmd>LspInfo<CR>")
+vkms("n", "<Leader>lf", function() vim.lsp.buf.format() end)
+vkms("v", "<Leader>lf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>")
 
 -- neotest
 vkms("n", "<Leader>tt", function() require("neotest").run.run(vim.fn.expand("%")) end)
