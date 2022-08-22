@@ -2,7 +2,7 @@
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local gopts = { noremap=true, silent=true }
 -- Awesome diagnostics
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, gopts)
+-- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, gopts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, gopts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, gopts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, gopts)
@@ -38,7 +38,7 @@ local on_attach = function(client, bufnr)
     local opts = { buffer = bufnr, noremap = true, silent = true }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)  -- done via lspsaga in keymaps
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
@@ -49,10 +49,10 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+    -- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
     vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
     vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-    vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+    -- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
     -- Debugging via DAP!
     vim.keymap.set("n", "<leader>c", ":lua require'dap'.continue()<CR>")
     vim.keymap.set("n", "<F3>", ":lua require'dap'.step_over()<CR>")

@@ -47,3 +47,17 @@ vkms("n", "<Leader>e", function()
         end
     end)
 end)
+
+-- LSPSaga!
+--
+
+-- Lsp finder find the symbol definition implmement reference
+-- when you use action in finder like open vsplit then your can
+-- use <C-t> to jump back
+vkms("n", "<leader>gh", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
+vkms("n", "<leader>gg", "<cmd>Lspsaga rename<CR>", { silent = true })
+vkms("n", "<leader>go", "<cmd>LSoutlineToggle<CR>",{ silent = true })
+vkms("n", "<leader>gd", "<cmd>Lspsaga preview_definition<CR>", { silent = true })
+vkms("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+-- Saga Diagnostics
+vkms("n", "<space>e", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
