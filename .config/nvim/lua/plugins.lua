@@ -61,6 +61,10 @@ require('packer').startup(function(use)
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-buffer",
         "L3MON4D3/LuaSnip" -- snippets!
+
+    }
+    use { "jose-elias-alvarez/null-ls.nvim",
+        config = conf('lsp')
     }
     -- snippets, not lua based...
     use { "rafamadriz/friendly-snippets" }
