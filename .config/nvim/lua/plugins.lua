@@ -129,6 +129,11 @@ require('packer').startup(function(use)
 
     -- Harpooooon
     use {'ThePrimeagen/harpoon', requires = {"nvim-lua/plenary.nvim"}}
+    -- show indent because.
+    use {
+        "lukas-reineke/indent-blankline.nvim",
+        config = conf('indentline')
+    }
     -- </plugins>
     if packer_bootstrap then
         require("packer").sync()
