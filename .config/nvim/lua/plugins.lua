@@ -1,11 +1,12 @@
 local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-    packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
+        install_path })
 end
 
 local function conf(pluggy)
-    require('configs.'..pluggy)
+    require('configs.' .. pluggy)
 end
 
 require('packer').startup(function(use)
@@ -28,13 +29,17 @@ require('packer').startup(function(use)
         }
     }
     use {
+        "nvim-treesitter/nvim-treesitter",
+        config = conf('treesitter')
+    }
+    use {
         'vimwiki/vimwiki',
         config = function()
             vim.g.vimwiki_list = {
                 {
-                    path = '~/vimwiki',
+                    path   = '~/vimwiki',
                     syntax = 'markdown',
-                    ext  = '.wiki',
+                    ext    = '.wiki',
                 }
             }
             vim.g.vimwiki_ext2syntax = {
@@ -72,12 +77,12 @@ require('packer').startup(function(use)
     -- Code Runner - Not a huuuuge fan, trying others.
     -- use { 'CRAG666/code_runner.nvim', requires = 'nvim-lua/plenary.nvim' }
     use { 'stevearc/overseer.nvim',
-      config = conf('overseer')
+        config = conf('overseer')
     }
     -- Startup Screen!
-    use {'glepnir/dashboard-nvim'}
+    use { 'glepnir/dashboard-nvim' }
     -- Session/Workspace Management!
-    use {'natecraddock/workspaces.nvim'}
+    use { 'natecraddock/workspaces.nvim' }
     -- Status Line
     use {
         'nvim-lualine/lualine.nvim',
@@ -98,8 +103,8 @@ require('packer').startup(function(use)
     use { "github/copilot.vim" }
     -- Debugger!
     use { "mfussenegger/nvim-dap" }
-    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
-    use { "mfussenegger/nvim-dap-python", requires = {"mfussenegger/nvim-dap"}  }
+    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+    use { "mfussenegger/nvim-dap-python", requires = { "mfussenegger/nvim-dap" } }
 
     -- Whichkey! popups
     use {
@@ -125,10 +130,10 @@ require('packer').startup(function(use)
         }
     }
     -- terminal toggles!
-    use {"akinsho/toggleterm.nvim"}
+    use { "akinsho/toggleterm.nvim" }
 
     -- Harpooooon
-    use {'ThePrimeagen/harpoon', requires = {"nvim-lua/plenary.nvim"}}
+    use { 'ThePrimeagen/harpoon', requires = { "nvim-lua/plenary.nvim" } }
     -- show indent because.
     use {
         "lukas-reineke/indent-blankline.nvim",
@@ -140,5 +145,3 @@ require('packer').startup(function(use)
     end
 end)
 -- print [[ Plugins Loaded ]]
-
-
