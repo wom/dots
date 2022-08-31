@@ -15,23 +15,24 @@ require('packer').startup(function(use)
     use 'tpope/vim-fugitive'
     use "EdenEast/nightfox.nvim" -- color Scheme!
     use {
+        "nvim-treesitter/nvim-treesitter",
+        config = conf('treesitter')
+    }
+    use {
         'nvim-telescope/telescope.nvim',
         requires = {
             {
                 'nvim-lua/plenary.nvim',
                 'BurntSushi/ripgrep',
                 'sharkdp/fd',
-                'nvim-treesitter/nvim-treesitter',
                 'kyazdani42/nvim-web-devicons',
                 "nvim-telescope/telescope-file-browser.nvim",
                 "nvim-telescope/telescope-project.nvim"
             }
         }
     }
-    use {
-        "nvim-treesitter/nvim-treesitter",
-        config = conf('treesitter')
-    }
+    ---
+    -- Notes?
     use {
         'vimwiki/vimwiki',
         config = function()
@@ -50,6 +51,16 @@ require('packer').startup(function(use)
             }
         end
     }
+    -- OPne Day.
+    -- use {
+    --     "nvim-neorg/neorg",
+    --     requires = "nvim-lua/plenary.nvim",
+    --     ft = "norg",
+    --     after = "nvim-treesitter",
+    --     config = conf('neorg')
+    -- }
+
+    ---
     use {
         'kyazdani42/nvim-tree.lua',
         requires = {
@@ -123,7 +134,6 @@ require('packer').startup(function(use)
         "nvim-neotest/neotest",
         requires = {
             "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
             "antoinemadec/FixCursorHold.nvim",
             "nvim-neotest/neotest-python",
 

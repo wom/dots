@@ -23,6 +23,7 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>n <cmd>NvimTreeToggle<cr>
 ""
 filetype plugin indent on
+:set filetype=unix
 "autocmd!
 set hidden
 syntax on
