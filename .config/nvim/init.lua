@@ -13,12 +13,12 @@ else
         let os=system('uname -s')
 endif
 " Telescope!
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files  search_dirs={'.vscode','.','.env'}<cr>
 nnoremap <leader>fn <cmd>Telescope file_browser<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <c-p> <cmd>Telescope find_files<cr>
+nnoremap <c-p> <cmd>Telescope find_files  search_dirs={'.vscode','.','.env'}<cr>
 ""
 " NvimTree
 nnoremap <leader>n <cmd>NvimTreeToggle<cr>
