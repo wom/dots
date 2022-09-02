@@ -106,7 +106,7 @@ wkey.register({
     },
     l = {
       name = "LSP/Formatting",
-      f = "autopep8 Format; accepts range.",
+      f = "Format",
     },
     o = {
       name = "Overseer (Task Runner)",

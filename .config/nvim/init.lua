@@ -18,6 +18,7 @@ nnoremap <leader>fn <cmd>Telescope file_browser<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <c-p> <cmd>Telescope find_files<cr>
 ""
 " NvimTree
 nnoremap <leader>n <cmd>NvimTreeToggle<cr>

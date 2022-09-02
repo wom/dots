@@ -16,6 +16,9 @@ require('packer').startup(function(use)
     use "EdenEast/nightfox.nvim" -- color Scheme!
     use {
         "nvim-treesitter/nvim-treesitter",
+        requires ={
+            "nvim-treesitter/nvim-treesitter-context"
+        },
         config = conf('treesitter')
     }
     use {
@@ -27,7 +30,7 @@ require('packer').startup(function(use)
                 'sharkdp/fd',
                 'kyazdani42/nvim-web-devicons',
                 "nvim-telescope/telescope-file-browser.nvim",
-                "nvim-telescope/telescope-project.nvim"
+                "nvim-telescope/telescope-project.nvim",
             }
         }
     }
