@@ -11,15 +11,15 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, gopts)
 -----
 -- GitHub Copilot
 -- Disable for unknown filetypes
-vim.g.copilot_filetypes = {
-    ["*"] = false,
-    python = true,
-    lua = true,
-    bash = true,
-    rust = true,
-    html = true,
-    javascript = true,
-}
+-- vim.g.copilot_filetypes = {
+--     ["*"] = false,
+--     python = true,
+--     lua = true,
+--     bash = true,
+--     rust = true,
+--     html = true,
+--     javascript = true,
+-- }
 -----
 
 -- Uncomment for more detailed info

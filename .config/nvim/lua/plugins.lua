@@ -113,8 +113,8 @@ require('packer').startup(function(use)
         tag = "v2.*",
         requires = 'kyazdani42/nvim-web-devicons'
     }
-    -- ... copilot? CoPilot!
-    use { "github/copilot.vim" }
+    -- ... copilot? Copilot!
+    -- use { "github/copilot.vim" }
     -- Debugger!
     use { "mfussenegger/nvim-dap" }
     use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
