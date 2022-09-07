@@ -67,6 +67,14 @@ set cursorline
 
 map <leader><space>     :nohlsearch <CR>
 
+"multiple splits
+"nmap + <C-W>+
+"nmap - <C-W>-
+nnoremap <silent> <Down> <C-W>+
+nnoremap <silent> <Up> <C-W>-
+nnoremap <silent> <Right> <C-W>>
+nnoremap <silent> <Left> <C-W><
+
 function! MyDate()
         let @x = substitute(system("date \"+%A, %B %d %Y\"")."\n","\n"," ", "")
         "let @x = substitute(system("date \"+%A, %B %d %Y\"")."\n   -----------------------------","\n"," ", "")
