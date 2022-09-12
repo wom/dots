@@ -61,5 +61,26 @@ vkms("n", "<leader>gr", "<cmd>Lspsaga rename<CR>", { silent = true })
 vkms("n", "<leader>go", "<cmd>LSoutlineToggle<CR>",{ silent = true })
 vkms("n", "<leader>gd", "<cmd>Lspsaga preview_definition<CR>", { silent = true })
 vkms("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+
 -- Saga Diagnostics
 vkms("n", "<space>e", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
+
+-- Snippets
+vim.keymap.set({ "i", "s" }, "<c-j>", function()
+    local ls = require("luasnip")
+    if ls.jumpable(-1) then
+        ls.jump(-1)
+    end
+end, { silent = true })
+vkms({ "i", "s" }, "<c-k>", function()
+    local ls = require("luasnip")
+    if ls.expand_or_jumpable() then
+        ls.expand_or_jump()
+    end
+end, { silent = true })
+vkms("i", "<c-l>", function()
+    local ls = require("luasnip")
+    if ls.choice_active() then
+        ls.change_choice(1)
+    end
+end)

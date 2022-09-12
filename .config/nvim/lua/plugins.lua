@@ -80,6 +80,7 @@ require('packer').startup(function(use)
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-buffer",
         "L3MON4D3/LuaSnip", -- snippets!
+        "saadparwaiz1/cmp_luasnip",
         "jose-elias-alvarez/null-ls.nvim",
         "glepnir/lspsaga.nvim",
         config = conf('lsp')
