@@ -63,7 +63,7 @@ vkms("n", "<leader>gd", "<cmd>Lspsaga preview_definition<CR>", { silent = true }
 vkms("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
 
 -- Saga Diagnostics
-vkms("n", "<space>e", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
+vkms("n", "<leader>k", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
 
 -- Snippets
 vim.keymap.set({ "i", "s" }, "<c-j>", function()
