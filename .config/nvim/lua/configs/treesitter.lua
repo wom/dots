@@ -37,7 +37,7 @@ tscon.setup({
     },
     indent = {
         enable = true,
-        disable = { "yaml" }
+        disable = { "yaml", "python" } -- why does TS suck so much at python.
     },
 })
 

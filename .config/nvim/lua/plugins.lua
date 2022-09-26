@@ -21,6 +21,7 @@ require('packer').startup(function(use)
         },
         config = conf('treesitter')
     }
+    use { "Vimjas/vim-python-pep8-indent" } -- Needed because treesitter sucks at indenting Python
     use {
         'nvim-telescope/telescope.nvim',
         requires = {
