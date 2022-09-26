@@ -1,6 +1,8 @@
 local Settings = {}
 Settings.load_settings = function()
     vim.cmd('colorscheme duskfox') -- How to do via lua?
+    vim.g.mapleader = ' '
+    vim.g.maplocalleader = ' '
     vim.opt.showcmd = true
     vim.opt.expandtab = true
     vim.opt.shiftwidth = 4
