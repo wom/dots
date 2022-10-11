@@ -13,7 +13,12 @@ require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     -- <plugins>
     use 'tpope/vim-fugitive'
-    use "EdenEast/nightfox.nvim" -- color Scheme!
+    -- use "EdenEast/nightfox.nvim" -- color Scheme! Might want to play with catppuccin in the future
+    use {
+	"catppuccin/nvim",
+	as = "catppuccin",
+	config = conf('catppuccin')
+    }
     use {
         "nvim-treesitter/nvim-treesitter",
         requires ={
@@ -73,6 +78,7 @@ require('packer').startup(function(use)
         tag = 'nightly' -- optional, updated every week. (see issue #1193)
     }
     -- Native LSP stuffs
+    use({ "jose-elias-alvarez/null-ls.nvim"})
     use {
         "williamboman/mason.nvim", -- lets nvim manage local LSPs/etc
         "williamboman/mason-lspconfig.nvim",
@@ -82,7 +88,6 @@ require('packer').startup(function(use)
         "hrsh7th/cmp-buffer",
         "L3MON4D3/LuaSnip", -- snippets!
         "saadparwaiz1/cmp_luasnip",
-        "jose-elias-alvarez/null-ls.nvim",
         "glepnir/lspsaga.nvim",
         config = conf('lsp')
     }
@@ -154,6 +159,14 @@ require('packer').startup(function(use)
         "lukas-reineke/indent-blankline.nvim",
         config = conf('indentline')
     }
+    use {
+        "folke/trouble.nvim",
+        requires = "kyazdani42/nvim-web-devicons",
+        config = conf('trouble')
+    }
+
+    use { 'folke/todo-comments.nvim', config = conf('todo') }
+
     -- </plugins>
     if packer_bootstrap then
         require("packer").sync()
