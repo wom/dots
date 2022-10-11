@@ -3,6 +3,7 @@ require('plugins')
 require('setup')
 require('settings').load_settings()
 require('keymaps')
+-- require('neovideconf') -- This needs some TLC; not working for me in x11 or --remote
 
 -- settings - Move into wom at some point and migrate to native lua
 
@@ -19,6 +20,7 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <c-p> <cmd>Telescope find_files  search_dirs={'.vscode','.','.env'}<cr>
+nnoremap <c-l> <cmd>Telescope live_grep  search_dirs={'.vscode','.','.env'}<cr>
 ""
 " NvimTree
 nnoremap <leader>n <cmd>NvimTreeToggle<cr>
