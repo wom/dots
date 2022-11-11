@@ -226,3 +226,12 @@ if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
 if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
+fix_line_endings()
+{
+    set -x
+    tmpFile=$(mktemp)
+    cp ${1}{,.badle}
+    tr -d '\15\32' < "${1}" > "${tmpFile}"
+    mv -f "${tmpFile}" "${1}"
+    set +x
+}
