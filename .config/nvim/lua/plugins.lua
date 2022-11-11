@@ -15,13 +15,13 @@ require('packer').startup(function(use)
     use 'tpope/vim-fugitive'
     -- use "EdenEast/nightfox.nvim" -- color Scheme! Might want to play with catppuccin in the future
     use {
-	"catppuccin/nvim",
-	as = "catppuccin",
-	config = conf('catppuccin')
+        "catppuccin/nvim",
+        as = "catppuccin",
+        config = conf('catppuccin')
     }
     use {
         "nvim-treesitter/nvim-treesitter",
-        requires ={
+        requires = {
             "nvim-treesitter/nvim-treesitter-context"
         },
         config = conf('treesitter')
@@ -78,7 +78,9 @@ require('packer').startup(function(use)
         tag = 'nightly' -- optional, updated every week. (see issue #1193)
     }
     -- Native LSP stuffs
-    use({ "jose-elias-alvarez/null-ls.nvim"})
+    use({ "jose-elias-alvarez/null-ls.nvim" })
+    use({ "L3MON4D3/LuaSnip", config = conf("luasnip") })
+
     use {
         "williamboman/mason.nvim", -- lets nvim manage local LSPs/etc
         "williamboman/mason-lspconfig.nvim",

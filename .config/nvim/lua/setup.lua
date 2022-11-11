@@ -108,34 +108,16 @@ nvim_lsp['sumneko_lua'].setup {
 }
 
 -- These likely need better config
+nvim_lsp['bashls'].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    flags =lsp_flags,
+}
 nvim_lsp['dockerls'].setup { }
-nvim_lsp['bashls'].setup { }
 nvim_lsp['yamlls'].setup { }
 nvim_lsp['marksman'].setup { }
 
 
--- autocomplete!
--- Not sure if this luasnip stuff is OK.
-local luasnip = require("luasnip")
-luasnip.config.setup {
-    -- This tells LuaSnip to remember to keep around the last snippet.
-    -- You can jump back into it even if you move outside of the selection
-    history = true,
-
-    -- This one is cool cause if you have dynamic snippets, it updates as you type!
-    -- gives me errs.
-    updateevents = "TextChanged,TextChangedI",
-
-    -- Autosnippets:
-    enable_autosnippets = true,
-}
-
-
-
-
--- shorcut to source my luasnips file again, which will reload my snippets - pathing
--- vim.keymap.set("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>")
-require("luasnip.loaders.from_vscode").lazy_load() -- Loads FriendlySnippets 
 
 -- /end neosnip
 
