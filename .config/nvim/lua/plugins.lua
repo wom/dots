@@ -20,6 +20,7 @@ local function config_dir()
 end
 
 local function snapshot_dir()
+    -- We attempt to store snapshots in same dot repo as our config; aid in reproducibility between dev envs.
     local _snapshot_dir = utils.join_paths(config_dir(), "snapshot")
     return _snapshot_dir
 end
@@ -27,6 +28,8 @@ end
 local config = {
     autoremove = true,
     snapshot_path = snapshot_dir(),
+    -- To update a plugin
+    --     `:PackerSync` followed by `:PackerSnapshot GOLD` (and check in/push after verifying)
     snapshot = 'GOLD',
 }
 require('packer').startup({
