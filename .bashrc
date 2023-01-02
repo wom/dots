@@ -134,6 +134,7 @@ alias pc="python -m py_compile "
 alias yc="python -c 'import yaml, sys; print(yaml.safe_load(sys.stdin))' < "
 #alias az="/usr/local/bin/az"
 alias kb="kubectl"
+alias gs="git status "
 # For this to work, setup system wide kube completions.
 # kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 complete  -F __start_kubectl kb # get shell completion
