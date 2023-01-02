@@ -36,4 +36,22 @@ function M.isModuleAvailable(name)
   end
 end
 
+function M.join_paths(...)
+    local result = table.concat({ ... }, vim.loop.os_uname().version:match("Windows") and "\\" or "/")
+    return result
+end
+
+function M.get_config_dir()
+    local nvim_config_dir = M.join_paths(M.join_paths(os.getenv("HOME"), ".config"), "nvim")
+    if not nvim_config_dir then
+        return vim.call("stdpath", "config")
+    end
+    return nvim_config_dir
+end
+
+function M.get_snapshot_dir()
+    local nvim_snapshot_dir = M.join_paths(M.get_config_dir(), "snapshot")
+    return nvim_snapshot_dir
+end
+
 return M

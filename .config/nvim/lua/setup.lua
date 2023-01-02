@@ -115,7 +115,12 @@ nvim_lsp['bashls'].setup {
 }
 nvim_lsp['dockerls'].setup { }
 nvim_lsp['yamlls'].setup { }
-nvim_lsp['marksman'].setup { }
+nvim_lsp['marksman'].setup {
+    filetypes = {"markdown", "vimwiki"}
+}
+nvim_lsp['ltex'].setup {
+    filetypes = { "bib", "gitcommit", "markdown", "org", "plaintex", "rst", "rnoweb", "tex", "text", "vimwiki" },
+}
 
 
 
