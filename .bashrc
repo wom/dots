@@ -236,3 +236,10 @@ fix_line_endings()
     mv -f "${tmpFile}" "${1}"
     set +x
 }
+paste()
+{
+    # inside WSL - Paste from Windows clipboard.
+    # $ echo 'hi!' | clip.exe
+    # $ paste > /tmp/whyhellothere
+    powershell.exe Get-Clipboard | sed 's/\r//'
+}
