@@ -2,7 +2,7 @@ local fn = vim.fn
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
     packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
-        install_path })
+            install_path })
 end
 
 local function conf(pluggy)
@@ -30,19 +30,15 @@ local config = {
     snapshot_path = snapshot_dir(),
     -- To update a plugin
     --     `:PackerSync` followed by `:PackerSnapshot GOLD` (and check in/push after verifying)
+    --     May need 
+    --     :checkhealth -- Audit results, may need
+    --     :TSUpdate vim python help markdown markdown_inline-- insert required languages
     snapshot = 'GOLD',
 }
 require('packer').startup({
     function(use)
         use 'wbthomason/packer.nvim'
         -- <plugins>
-        use 'tpope/vim-fugitive'
-        -- use "EdenEast/nightfox.nvim" -- color Scheme! Might want to play with catppuccin in the future
-        use {
-            "catppuccin/nvim",
-            as = "catppuccin",
-            config = conf('catppuccin')
-        }
         use {
             "nvim-treesitter/nvim-treesitter",
             requires = {
@@ -50,7 +46,6 @@ require('packer').startup({
             },
             config = conf('treesitter')
         }
-        use { "Vimjas/vim-python-pep8-indent" } -- Needed because treesitter sucks at indenting Python
         use {
             'nvim-telescope/telescope.nvim',
             requires = {
@@ -64,8 +59,31 @@ require('packer').startup({
                 }
             }
         }
-        ---
-        -- Notes?
+        -- Native LSP stuffs
+        use({ "jose-elias-alvarez/null-ls.nvim" })
+        use({ "L3MON4D3/LuaSnip", config = conf("luasnip") })
+
+        use {
+            "neovim/nvim-lspconfig", -- lspconfig!
+            "williamboman/mason.nvim", -- lets nvim manage local LSPs/etc
+            "williamboman/mason-lspconfig.nvim",
+            "hrsh7th/nvim-cmp", -- autocompletion framework
+            "hrsh7th/cmp-nvim-lsp", -- LSP Autocompletion provider
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-buffer",
+            "saadparwaiz1/cmp_luasnip",
+            "glepnir/lspsaga.nvim",
+            config = conf('lsp')
+        }
+        -- Debugger!
+        use { "mfussenegger/nvim-dap" }
+        use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+        use {
+            "mfussenegger/nvim-dap-python",
+            requires = { "mfussenegger/nvim-dap" }
+        }
+        --        ---
+        --        -- Notes.
         use {
             'vimwiki/vimwiki',
             config = function()
@@ -84,74 +102,50 @@ require('packer').startup({
                 }
             end
         }
-        -- OPne Day.
-        -- use {
-        --     "nvim-neorg/neorg",
-        --     requires = "nvim-lua/plenary.nvim",
-        --     ft = "norg",
-        --     after = "nvim-treesitter",
-        --     config = conf('neorg')
-        -- }
-
-        ---
+        use { "Vimjas/vim-python-pep8-indent" } -- Needed because treesitter sucks at indenting Python
+        use { "tpope/vim-fugitive" }
+        use {
+            "catppuccin/nvim",
+            as = "catppuccin",
+            config = conf('catppuccin')
+        }
         use {
             'kyazdani42/nvim-tree.lua',
             requires = {
                 'kyazdani42/nvim-web-devicons', -- optional, for file icons
-            },
-            tag = 'nightly' -- optional, updated every week. (see issue #1193)
-        }
-        -- Native LSP stuffs
-        use({ "jose-elias-alvarez/null-ls.nvim" })
-        use({ "L3MON4D3/LuaSnip", config = conf("luasnip") })
-
-        use {
-            "williamboman/mason.nvim", -- lets nvim manage local LSPs/etc
-            "williamboman/mason-lspconfig.nvim",
-            "hrsh7th/nvim-cmp", -- autocompletion framework
-            "hrsh7th/cmp-nvim-lsp", -- LSP Autocompletion provider
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-buffer",
-            "saadparwaiz1/cmp_luasnip",
-            "glepnir/lspsaga.nvim",
-            config = conf('lsp')
+            }
         }
         -- snippets, not lua based...
         use { "rafamadriz/friendly-snippets" }
-        -- Code commenter - this seems wonk
+        -- Code commenter
         use { 'numToStr/Comment.nvim' }
-        -- Code Runner - Not a huuuuge fan, trying others.
-        -- use { 'CRAG666/code_runner.nvim', requires = 'nvim-lua/plenary.nvim' }
         use { 'stevearc/overseer.nvim',
             config = conf('overseer')
         }
-        -- Startup Screen!
-        use { 'glepnir/dashboard-nvim' }
+        --        -- Startup Screen!
+        --use { 'glepnir/dashboard-nvim' }
         -- Session/Workspace Management!
         use { 'natecraddock/workspaces.nvim' }
+        ----
         -- Status Line
         use {
             'nvim-lualine/lualine.nvim',
             requires = { 'kyazdani42/nvim-web-devicons', opt = true }
         }
-        -- breadcrumbs! Why doesn't it work in pylance?
         use {
             "SmiteshP/nvim-navic",
             requires = "neovim/nvim-lspconfig"
         }
-        -- Buffers @ top
+        ----
+        --        -- Buffers @ top
         use {
             "akinsho/bufferline.nvim",
             tag = "v2.*",
             requires = 'kyazdani42/nvim-web-devicons'
         }
-        -- ... copilot? Copilot!
-        -- use { "github/copilot.vim" }
-        -- Debugger!
-        use { "mfussenegger/nvim-dap" }
-        use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
-        use { "mfussenegger/nvim-dap-python", requires = { "mfussenegger/nvim-dap" } }
-
+        --        -- ... copilot? Copilot!
+        --        -- use { "github/copilot.vim" }
+        --
         -- Whichkey! popups
         use {
             "folke/which-key.nvim",
@@ -177,8 +171,6 @@ require('packer').startup({
         -- terminal toggles!
         use { "akinsho/toggleterm.nvim" }
 
-        -- Harpooooon
-        use { 'ThePrimeagen/harpoon', requires = { "nvim-lua/plenary.nvim" } }
         -- show indent because.
         use {
             "lukas-reineke/indent-blankline.nvim",
@@ -189,8 +181,6 @@ require('packer').startup({
             requires = "kyazdani42/nvim-web-devicons",
             config = conf('trouble')
         }
-
-        use { 'folke/todo-comments.nvim', config = conf('todo') }
 
         -- </plugins>
         if packer_bootstrap then

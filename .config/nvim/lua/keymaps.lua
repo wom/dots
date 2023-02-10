@@ -58,9 +58,9 @@ end)
 -- use <C-t> to jump back
 vkms("n", "<leader>gh", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
 vkms("n", "<leader>gr", "<cmd>Lspsaga rename<CR>", { silent = true })
-vkms("n", "<leader>go", "<cmd>LSoutlineToggle<CR>",{ silent = true })
-vkms("n", "<leader>gd", "<cmd>Lspsaga preview_definition<CR>", { silent = true })
-vkms("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+vkms("n", "<leader>go", "<cmd>Lspsaga outline<CR>",{ silent = true })
+vkms("n", "<leader>gp", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+vkms("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true }) -- this requires :TSUpdate markdown_inline
 
 -- Saga Diagnostics
 vkms("n", "<leader>k", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })

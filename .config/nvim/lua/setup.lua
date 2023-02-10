@@ -24,7 +24,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, gopts)
 
 -- Uncomment for more detailed info
 -- vim.lsp.set_log_level 'trace'
-local nvim_lsp = require 'lspconfig'
+local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
     local function buf_set_option(...)
         vim.api.nvim_buf_set_option(bufnr, ...)
@@ -79,9 +79,7 @@ require("mason-lspconfig").setup {
     ensure_installed = {
         "sumneko_lua",
         "pyright",
-        "debugpy",
         "marksman",
-        "shellcheck"
     },
 }
 -- :Mason for overview of available language servers/linters/formatters/etc
@@ -94,6 +92,34 @@ nvim_lsp['pyright'].setup {
     cmd = cmd,
     on_attach = on_attach,
     flags = lsp_flags,
+}
+local rustcmd = { 'rust-analyzer' }
+nvim_lsp['rust_analyzer'].setup {
+    cmd = rustcmd,
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
+-- ansible-language-server
+nvim_lsp['ansiblels'].setup{
+    filetypes = {'yml', 'yaml'},
+    settings = {
+        ansible = {
+            path = "/home/chmuell/src/Avere-ats/.venv/bin/ansible"
+        },
+        executionEnvironment = {
+            enabled = false
+        },
+        python = {
+            interpreterPath = "/home/chmuell/src/Avere-ats/.venv/bin/python"
+        },
+        validation = {
+            enabled = true,
+            lint = {
+                enabled = true,
+                path = "/home/chmuell/venvs/misctools/.venv/bin/ansible-lint",
+            },
+        },
+    },
 }
 
 nvim_lsp['sumneko_lua'].setup {
@@ -114,7 +140,7 @@ nvim_lsp['bashls'].setup {
     flags =lsp_flags,
 }
 nvim_lsp['dockerls'].setup { }
-nvim_lsp['yamlls'].setup { }
+-- nvim_lsp['yamlls'].setup { }
 nvim_lsp['marksman'].setup {
     filetypes = {"markdown", "vimwiki"}
 }
@@ -130,29 +156,29 @@ nvim_lsp['ltex'].setup {
 require("nvim-tree").setup()
 
 --Dashboard Setup
-local home = os.getenv('HOME')
-local db = require('dashboard')
-db.preview_command = 'cat | lolcat -F 0.3' -- make lolcat safer?
-db.preview_file_path = home .. '/.config/nvim/static/neovim.cat'
-db.preview_file_height = 12
-db.preview_file_width = 80
-db.custom_center = {
-    {icon = '💼 ',
-    desc = 'Select Workspace',
-    action =  'WorkspacesOpen'},
-    {icon = '  ',
-    desc = 'Find File         ',
-    action = 'Telescope find_files find_command=rg,--hidden,--files',
-    shortcut = '(\\ff)'},
-    {icon = '   ',
-    desc ='File Browser      ',
-    action =  'Telescope file_browser',
-    shortcut = '(\\fn)'},
-    {icon = '  ',
-    desc = 'Grep              ',
-    action = 'Telescope live_grep',
-    shortcut = '(\\fg)'},
-}
+-- local home = os.getenv('HOME')
+-- local db = require('dashboard')
+--db.preview_command = 'cat | lolcat -F 0.3' -- make lolcat safer?
+--db.preview_file_path = home .. '/.config/nvim/static/neovim.cat'
+--db.preview_file_height = 12
+--db.preview_file_width = 80
+--db.custom_center = {
+--    {icon = '💼 ',
+--    desc = 'Select Workspace',
+--    action =  'WorkspacesOpen'},
+--    {icon = '  ',
+--    desc = 'Find File         ',
+--    action = 'Telescope find_files find_command=rg,--hidden,--files',
+--    shortcut = '(\\ff)'},
+--    {icon = '   ',
+--    desc ='File Browser      ',
+--    action =  'Telescope file_browser',
+--    shortcut = '(\\fn)'},
+--    {icon = '  ',
+--    desc = 'Grep              ',
+--    action = 'Telescope live_grep',
+--    shortcut = '(\\fg)'},
+--}
 
 
 -- Code Runner

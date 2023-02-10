@@ -21,7 +21,7 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <c-p> <cmd>Telescope find_files  search_dirs={'.vscode','.','.env'}<cr>
 nnoremap <c-l> <cmd>Telescope live_grep  search_dirs={'.vscode','.','.env'}<cr>
-nnoremap <c-m> <cmd>Telescope marks<cr>
+nnoremap <c-;> <cmd>Telescope marks<cr> -- cant' use <c-m> as termcode.
 ""
 " NvimTree
 nnoremap <leader>n <cmd>NvimTreeToggle<cr>

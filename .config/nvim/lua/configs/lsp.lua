@@ -28,10 +28,7 @@ null_ls.setup({
 })
 
 --- lspsaga!
-local saga = require("lspsaga")
-
-saga.init_lsp_saga({
-})
+require("lspsaga").setup()
 
 -- nvim-cmp
 local cmp = require('cmp')
