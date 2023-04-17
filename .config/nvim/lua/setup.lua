@@ -33,7 +33,9 @@ local on_attach = function(client, bufnr)
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- status line/breadcrubs
-    require("nvim-navic").attach(client, bufnr)
+    if client.server_capabilities.documentSymbolProvider then
+        require("nvim-navic").attach(client, bufnr)
+    end
     -- Mappings.
     local opts = { buffer = bufnr, noremap = true, silent = true }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
@@ -80,6 +82,7 @@ require("mason-lspconfig").setup {
         "sumneko_lua",
         "pyright",
         "marksman",
+        "ruff_lsp",
     },
 }
 -- :Mason for overview of available language servers/linters/formatters/etc
@@ -99,29 +102,19 @@ nvim_lsp['rust_analyzer'].setup {
     on_attach = on_attach,
     flags = lsp_flags,
 }
--- ansible-language-server
-nvim_lsp['ansiblels'].setup{
-    filetypes = {'yml', 'yaml'},
+-- yaml-language-server
+local ymlbin_name = 'yaml-language-server'
+local ymlcmd = { ymlbin_name, '--stdio' }
+nvim_lsp['yamlls'].setup{
+    cmd = ymlcmd,
+    filetypes = { 'yaml', 'yaml.docker-compose' },
+    root_dir = require('lsputils').find_git_ancestor,
+    single_file_support = true,
     settings = {
-        ansible = {
-            path = "/home/chmuell/src/Avere-ats/.venv/bin/ansible"
-        },
-        executionEnvironment = {
-            enabled = false
-        },
-        python = {
-            interpreterPath = "/home/chmuell/src/Avere-ats/.venv/bin/python"
-        },
-        validation = {
-            enabled = true,
-            lint = {
-                enabled = true,
-                path = "/home/chmuell/venvs/misctools/.venv/bin/ansible-lint",
-            },
-        },
+      -- https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
+      redhat = { telemetry = { enabled = false } },
     },
 }
-
 nvim_lsp['sumneko_lua'].setup {
     on_attach = on_attach,
     settings = {
@@ -136,7 +129,7 @@ nvim_lsp['sumneko_lua'].setup {
 -- These likely need better config
 nvim_lsp['bashls'].setup {
     on_attach = on_attach,
-    capabilities = capabilities,
+    -- capabilities = capabilities, -- Define the capabilities better
     flags =lsp_flags,
 }
 nvim_lsp['dockerls'].setup { }
@@ -146,7 +139,19 @@ nvim_lsp['marksman'].setup {
 }
 nvim_lsp['ltex'].setup {
     filetypes = { "bib", "gitcommit", "markdown", "org", "plaintex", "rst", "rnoweb", "tex", "text", "vimwiki" },
+
 }
+nvim_lsp['ruff_lsp'].setup {
+    on_attach = on_attach,
+    init_options = {
+        settings = {
+
+            args = {},
+        }
+    }
+}
+
+
 
 
 
@@ -218,6 +223,15 @@ require("workspaces").setup {
 }
 -- Status line
 local navic = require("nvim-navic")
+-- lazy-updates on large files.
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        if vim.api.nvim_buf_line_count(0) > 1000 then
+            vim.b.navic_lazy_update_context = true
+        end
+    end,
+})
+
 require('lualine').setup({
     sections = {
         lualine_c = {
