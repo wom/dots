@@ -113,6 +113,19 @@ nvim_lsp['yamlls'].setup{
     settings = {
       -- https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
       redhat = { telemetry = { enabled = false } },
+        yaml = {
+        schemas = {
+            ['http://json.schemastore.org/github-workflow'] = '.github/workflows/*.{yml,yaml}',
+            ['http://json.schemastore.org/github-action'] = '.github/action.{yml,yaml}',
+            ['http://json.schemastore.org/ansible-stable-2.9'] = 'roles/tasks/*.{yml,yaml}',
+            ['http://json.schemastore.org/prettierrc'] = '.prettierrc.{yml,yaml}',
+            ['http://json.schemastore.org/stylelintrc'] = '.stylelintrc.{yml,yaml}',
+            ['http://json.schemastore.org/circleciconfig'] = '.circleci/**/*.{yml,yaml}',
+            ['https://json.schemastore.org/kustomization'] = 'kustomization.{yml,yaml}',
+            ['https://json.schemastore.org/cloudbuild'] = '*cloudbuild.{yml,yaml}',
+            ['https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json'] = '*.{yml,yaml}'
+        }
+        }
     },
 }
 nvim_lsp['sumneko_lua'].setup {
