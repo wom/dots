@@ -79,7 +79,7 @@ require("mason").setup {
 }
 require("mason-lspconfig").setup {
     ensure_installed = {
-        "sumneko_lua",
+        "lua_ls",
         "pyright",
         "marksman",
         "ruff_lsp",
@@ -128,7 +128,8 @@ nvim_lsp['yamlls'].setup{
         }
     },
 }
-nvim_lsp['sumneko_lua'].setup {
+-- nvim_lsp['sumneko_lua'].setup {
+nvim_lsp['lua_ls'].setup {
     on_attach = on_attach,
     settings = {
         Lua = {
