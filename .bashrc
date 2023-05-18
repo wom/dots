@@ -124,6 +124,7 @@ alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
 alias bat="batcat"
+alias fd="fdfind"
 alias grep="grep --color=tty -d skip"
 alias hd='od -Ax -tx1z -v'
 alias realpath='readlink -f'
