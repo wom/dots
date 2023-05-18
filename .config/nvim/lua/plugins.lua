@@ -143,8 +143,8 @@ require('packer').startup({
             tag = "v2.*",
             requires = 'kyazdani42/nvim-web-devicons'
         }
-        --        -- ... copilot? Copilot!
-        --        -- use { "github/copilot.vim" }
+        -- ... copilot? Copilot!
+        use { "github/copilot.vim" }
         --
         -- Whichkey! popups
         use {

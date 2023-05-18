@@ -13,6 +13,11 @@ if has("win32") || has("win16")
 else 
         let os=system('uname -s')
 endif
+" Copilot!
+"
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+
 " Telescope!
 nnoremap <leader>ff <cmd>Telescope find_files  search_dirs={'.vscode','.','.env'}<cr>
 nnoremap <leader>fn <cmd>Telescope file_browser<cr>
