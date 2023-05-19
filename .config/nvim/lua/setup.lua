@@ -20,6 +20,7 @@ vim.g.copilot_filetypes = {
     rust = true,
     html = true,
     yaml = true,
+    sh = true,
     javascript = true,
 }
 -----
