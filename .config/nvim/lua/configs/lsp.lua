@@ -20,6 +20,7 @@ null_ls.setup({
     --     diagnostic.code = diagnostic.message_id
     --   end,
     -- }),
+    -- Python!
     null_ls.builtins.formatting.ruff,
     null_ls.builtins.diagnostics.ruff,
     null_ls.builtins.formatting.isort,
@@ -27,6 +28,10 @@ null_ls.setup({
     null_ls.builtins.diagnostics.yamllint,
     -- null_ls.builtins.formatting.autopep8,
     null_ls.builtins.formatting.black, -- One Day.
+    -- Go!
+    null_ls.builtins.formatting.gofumpt,
+    null_ls.builtins.formatting.goimports_reviser,
+    null_ls.builtins.formatting.golines,
 
   },
 })

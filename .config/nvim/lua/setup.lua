@@ -28,6 +28,8 @@ vim.g.copilot_filetypes = {
 -- Uncomment for more detailed info
 -- vim.lsp.set_log_level 'trace'
 local nvim_lsp = require('lspconfig')
+-- local capabilities = require("plugins.configs.lspconfig").capabilities
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local on_attach = function(client, bufnr)
     local function buf_set_option(...)
         vim.api.nvim_buf_set_option(bufnr, ...)
@@ -166,6 +168,23 @@ nvim_lsp['ruff_lsp'].setup {
         }
     }
 }
+-- Golang
+nvim_lsp['gopls'].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = {"gopls"},
+    filetypes = {"go", "gomod"},
+    settings = {
+        gopls = {
+            completeUnimported = true,
+            usePlaceholders = true,
+            analyses = {
+                unusedparams = true,
+            },
+        },
+    },
+}
+
 
 
 
