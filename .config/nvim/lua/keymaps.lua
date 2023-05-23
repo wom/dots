@@ -44,8 +44,9 @@ vkms("n", "<Leader>e", function()
     local overseer = require("overseer")
     overseer.run_template({name = "Runner"}, function(task)
         if task then
-            overseer.run_action(task, 'open float')
-            -- overseer.run_action(task, 'open hsplit')
+            overseer.run_action(task, '')
+            -- Task writes to quickfix list by default, so open it.
+            vim.cmd("copen")
         end
     end)
 end)
