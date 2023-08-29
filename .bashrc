@@ -244,3 +244,33 @@ paste()
     # $ paste > /tmp/whyhellothere
     powershell.exe Get-Clipboard | sed 's/\r//'
 }
+# Shell-GPT integration BASH v0.1 - needs shellgpt
+_sgpt_bash() {
+if [[ -n "$READLINE_LINE" ]]; then
+	READLINE_LINE=$(sgpt --shell <<< "$READLINE_LINE")
+    READLINE_POINT=${#READLINE_LINE}
+fi
+}
+
+# require the user to have shellgpt installed (easiest in a venv) and OPENAI_API_KEY set in environment.
+# Shell-GPT integration BASH v0.1
+# ctrl-l to turn plain text prompt into a unix command.
+bind -x '"\C-l": _sgpt_bash'
+alias sgpt='~/venvs/shellgpt/bin/sgpt'
+# export gptRoll=" --role def-butcher "
+# export gptRoll=" --role vader "
+export gptRoll=" --role yoda "
+alias g="~/venvs/shellgpt/bin/sgpt ${gptRoll}"
+# # short function to spin up a shellgpt repl quickly; or let me connect to an existng.
+gr ()
+{
+    if [ -z "$1" ]; then
+        # no token passed in, generate one
+        token=$(shuf -i 1000-9999 -n 1)
+        echo "token: ${token}"
+        ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${token}"
+    else
+        g --list-chats | grep "${@}"
+        ~//venvs/shellgpt/bin/sgpt ${gptRoll} --repl "$@"
+    fi
+}
