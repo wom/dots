@@ -1,22 +1,25 @@
-vim.cmd('set nocompatible')
 require('plugins')
-require('setup')
+-- require('setup')
 require('settings').load_settings()
-require('keymaps')
+-- require('keymaps')
 -- require('neovideconf') -- This needs some TLC; not working for me in x11 or --remote
 
 -- settings - Move into wom at some point and migrate to native lua
-
 vim.cmd([[
+set nocompatible
 if has("win32") || has("win16")
         let os="windows"
 else 
         let os=system('uname -s')
 endif
+"" Color'in
+colorscheme catppuccin
+""
 " Copilot!
 "
 imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
+""
 
 " Telescope!
 nnoremap <leader>ff <cmd>Telescope find_files  search_dirs={'.vscode','.','.env'}<cr>

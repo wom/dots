@@ -1,10 +1,11 @@
 if not require('utils').isModuleAvailable('catppuccin') then
     --- Only import if available; allows clean bootstrapping.
+    print('Cat-pee not installed yet.')
     return
 end
-
 -- darkmode
 vim.g.catppuccin_flavour = "mocha" -- latte, frappe, macchiato, mocha
+vim.cmd([[colorscheme catppuccin]])
 -- lightmode
 -- vim.g.catppuccin_flavour = "latte" -- latte, frappe, macchiato, mocha
 require("catppuccin").setup({
