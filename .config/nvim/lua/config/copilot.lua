@@ -1,0 +1,19 @@
+{
+  "zbirenbaum/copilot.lua",
+  cmd = "Copilot",
+  build = ":Copilot auth",
+  opts = {
+    suggestion = { enabled = false },
+    panel = { enabled = false },
+    filetypes = {
+      markdown = true,
+      python = true,
+      yaml = true,
+      lua = true,
+      bash = true,
+      sh = true,
+      zsh = true,
+      help = true,
+    },
+  },
+}
