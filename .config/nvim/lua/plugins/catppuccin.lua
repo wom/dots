@@ -7,6 +7,7 @@ return {
             integrations = {
                 alpha = true,
                 cmp = true,
+                vimwiki = true,
                 flash = true,
                 gitsigns = true,
                 illuminate = true,
