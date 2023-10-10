@@ -119,11 +119,19 @@ end)
 -- comment ToDo stuff
 vkms("n", "<leader>xt", "<cmd>TodoTelescope<CR>", { silent = true })
 -- Lua
+-- Trouble mappings...
 vkms("n", "<leader>xx", "<cmd>TroubleToggle<cr>", { silent = true, noremap = true })
 vkms("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", { silent = true, noremap = true })
 vkms("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", { silent = true, noremap = true })
 vkms("n", "<leader>xl", "<cmd>TroubleToggle loclist<cr>", { silent = true, noremap = true })
 vkms("n", "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", { silent = true, noremap = true })
 vkms("n", "gR", "<cmd>TroubleToggle lsp_references<cr>", { silent = true, noremap = true })
--- Trouble mappings...
 --
+
+-- Copy/Paste helpers
+-- Send to system clipboard when possible
+local in_wsl = os.getenv("WSL_DISTRO_NAME") ~= nil
+if in_wsl then
+    vkms("n", "<leader>yy", "<cmd>w !clip.exe<cr>", { silent = true, noremap = true })
+    vkms("v", "<leader>yy", "<cmd>'<,'>w !clip.exe<cr>", { silent = true, noremap = true })
+end
