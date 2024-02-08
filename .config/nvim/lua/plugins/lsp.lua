@@ -115,7 +115,7 @@ return {
             local util = require("lspconfig/util")
             require("lspconfig").pyright.setup({
                 capabilities = capabilities,
-                on_attach = attach,
+                -- on_attach = attach,
                 root_dir = util.root_pattern(".git", ".env", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt"),
                 flags = {
                     debounce_text_changes = 1,
