@@ -19,7 +19,8 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "lua_ls",
-                    "pylsp",
+                    "pyright",
+                    "gopls",
                 },
                 automatic_installation = true,
             })
@@ -111,32 +112,21 @@ return {
                     },
                 },
             })
-
-            -- Python
-            require("lspconfig")["pylsp"].setup({
-                on_attach = on_attach,
+            local util = require("lspconfig/util")
+            require("lspconfig").pyright.setup({
                 capabilities = capabilities,
+                on_attach = attach,
+                root_dir = util.root_pattern(".git", ".env", "setup.py", "setup.cfg", "pyproject.toml", "requirements.txt"),
+                flags = {
+                    debounce_text_changes = 1,
+                },
                 settings = {
-                    pylsp = {
-                        plugins = {
-                            flake8 = {
-                                enabled = true,
-                                maxLineLength = 88, -- Black's line length
-                            },
-                            -- Disable plugins overlapping with flake8
-                            pycodestyle = {
-                                enabled = false,
-                            },
-                            mccabe = {
-                                enabled = false,
-                            },
-                            pyflakes = {
-                                enabled = false,
-                            },
-                            -- Use Black as the formatter
-                            autopep8 = {
-                                enabled = false,
-                            },
+                    python = {
+                        analysis = {
+                            --stubPath = "./typings",
+                            autoSearchPaths = false,
+                            useLibraryCodeForTypes = false,
+                            diagnosticMode = "openFilesOnly",
                         },
                     },
                 },
