@@ -28,3 +28,19 @@ lazy.setup("plugins")
 -- Might as well set up an easy-access keybinding
 
 require("utils.keys").map("n", "<leader>L", lazy.show, "Show Lazy")
+function NumberToggle()
+    if vim.wo.relativenumber == true then
+        vim.wo.relativenumber = false
+        vim.wo.foldcolumn = 0
+    else
+        if vim.wo.number == true then
+            vim.wo.number = false
+            vim.wo.relativenumber = true
+        else
+            vim.wo.number = true
+        end
+    end
+end
+
+vim.api.nvim_set_keymap('n', '<F2>', ':lua NumberToggle()<CR>', { noremap = true, silent = true })
+

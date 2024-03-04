@@ -6,6 +6,8 @@ local opts = {
     termguicolors = true,
     number = true,
     relativenumber = true,
+    foldmethod = 'indent',
+    foldlevelstart=99,
 }
 
 -- Set options from table

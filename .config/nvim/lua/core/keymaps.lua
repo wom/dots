@@ -48,3 +48,43 @@ end, "Toggle between light and dark themes")
 
 -- Clear after search
 map("n", "<leader><leader>", "<cmd>nohl<cr>", "Clear highlights")
+
+-- Quick Fix toggle
+map("n", "<leader>q", require("utils.keys").toggle_quickfix)
+
+-- LspSaga Mappings
+map("n", "<leader>t", ":Lspsaga term_toggle<cr>", "terminal toggle")
+map("n", "<leader>c", ":Lspsaga code_action<cr>", "code actions")
+map("n", "<leader>k", ":Lspsaga diagnostic_jump_next<cr>", "code actions")
+-- map("n", "<leader>K", ":Lspsaga diagnostic_jump_prev<cr>", "code actions")
+
+-- Legacy
+vim.cmd([[
+function! NumberToggle()
+    if (&relativenumber == 1)
+        "echo "isRelative"
+        :set norelativenumber
+        :set foldcolumn=0
+    else
+        "echo "inElse"
+        if (&number == 1)
+        "echo "isNumber"
+            :set nonumber
+            :set relativenumber
+        else
+            :set number
+        endif
+    endif
+endfunction
+nnoremap <F2> :call NumberToggle()<CR>
+
+function! DiffOrig()
+    if &diff
+        wincmd p | bdel | diffoff
+    else
+        vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+    endif
+endfunction
+map <leader>do :call DiffOrig()<cr>
+
+]])
