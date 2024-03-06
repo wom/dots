@@ -110,6 +110,8 @@ alias j=`which autojump`
 alias pyl='PYTHONPATH=. pylint'
 alias pyt='PYTHONPATH=. pytest'
 
+
+
 ##
 alias vimdiff="nvim -d"
 alias vidiff="nvim -d"
@@ -136,6 +138,27 @@ alias yc="python -c 'import yaml, sys; print(yaml.safe_load(sys.stdin))' < "
 #alias az="/usr/local/bin/az"
 alias kb="kubectl"
 alias gs="git status "
+# move any untracked files into a 'junk' folder
+alias gj="git ls-files --others --exclude-standard -z | xargs -0 -I {} mv {} junk/"
+gClean() {
+    # move any untracked files into a 'junk' folder
+    junk_dir="junk"
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        if [ "$(pwd)" != "$(git rev-parse --show-toplevel)" ]; then
+            echo "Not in the root of a git repository."
+            return 1
+        fi
+        mkdir -p "$junk_dir"
+        untracked_files=$(git ls-files --others --exclude-standard -- ':!junk/*')
+        if [ -n "$untracked_files" ]; then
+            mv $untracked_files "$junk_dir"/. && echo "Files cleaned successfully!"
+        else
+            echo "Clean!"
+        fi
+    else
+        echo "Not at top level of a git repository."
+    fi
+}
 # For this to work, setup system wide kube completions.
 # kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 complete  -F __start_kubectl kb # get shell completion
@@ -147,7 +170,7 @@ complete  -F __start_kubectl kb # get shell completion
 #cd ../ aliases
 dotSlash=""
 for i in 1 2 3 4
-do 
+do
     dotSlash=${dotSlash}'../';
     baseName=".${i}"
     alias $baseName="cd ${dotSlash}"
@@ -166,7 +189,7 @@ fi
 ##
 
 ##
-# Quick conversions 
+# Quick conversions
 epoc ()
 {
     perl -e "print scalar(localtime($1))"
@@ -211,20 +234,6 @@ EOF
 }
 
 
-# HSTR configuration 
-alias hh=hstr                                     # hh to be alias for hstr
-export HSTR_CONFIG=hicolor,raw-history-view       # get more colors and default to History view.
-shopt -s histappend                               # append new history items to .bash_history
-export HISTCONTROL=ignorespace                    # leading space hides commands from history
-export HISTFILESIZE=10000                         # increase history file size (default is 500)
-export HISTSIZE=${HISTFILESIZE}                   # increase history size (default is 500)
-# ensure synchronization between bash memory and history file
-export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
-# if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
-if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
-# if this is interactive shell, then bind 'kill last command' to Ctrl-x k
-if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
-
 if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
@@ -259,7 +268,9 @@ bind -x '"\C-l": _sgpt_bash'
 alias sgpt='~/venvs/shellgpt/bin/sgpt'
 # export gptRoll=" --role def-butcher "
 # export gptRoll=" --role vader "
-export gptRoll=" --role yoda "
+# export gptRoll=" --role yoda "
+# export gptRoll=" --role cp2077 "
+export gptRoll=" --role bg3_laezel "
 alias g="~/venvs/shellgpt/bin/sgpt ${gptRoll}"
 # # short function to spin up a shellgpt repl quickly; or let me connect to an existng.
 gr ()
@@ -274,3 +285,51 @@ gr ()
         ~//venvs/shellgpt/bin/sgpt ${gptRoll} --repl "$@"
     fi
 }
+
+function frg {
+    # fuzzy search via ripgrep and fzf - then open in editor on selection
+    result=`rg --ignore-case --color=always --line-number --no-heading "$@" |
+        fzf --ansi \
+        --color 'hl:-1:underline,hl+:-1:underline:reverse' \
+        --delimiter ':' \
+        --preview "/usr/bin/batcat --color=always {1} --theme='Solarized (dark)' --highlight-line {2}" \
+        --preview-window 'up,62%,border-bottom,+{2}+3/3,~3'`
+            file="${result%%:*}"
+            linenumber=`echo "${result}" | cut -d: -f2`
+            if [ ! -z "$file" ]; then
+                if [ "$TERM_PROGRAM" == "vscode" ]; then
+                    code -g "${file}:${linenumber}"
+                else
+                    $EDITOR +"${linenumber}" "$file"
+                fi
+            fi
+        }
+
+gblame () {
+
+    local file=$(fzf)
+
+    cat "$file" | \
+        awk '{printf("%5d %s\n", NR, $0)}' |\
+        fzf --layout reverse --preview-window up --preview "echo {} | awk '{print \$1}' | xargs -I _ sh -c \"git log --color -L_,'+1:${file}'\""
+
+}
+if command -v zoxide &> /dev/null
+then
+    eval "$(zoxide init bash)"
+    alias cd='z'
+fi
+
+# HSTR configuration - add this to ~/.bashrc
+alias hh=hstr                    # hh to be alias for hstr
+export HSTR_CONFIG=hicolor       # get more colors
+shopt -s histappend              # append new history items to .bash_history
+export HISTCONTROL=ignorespace   # leading space hides commands from history
+export HISTFILESIZE=10000        # increase history file size (default is 500)
+export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
+# ensure synchronization between bash memory and history file
+export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+# if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
+if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
+# if this is interactive shell, then bind 'kill last command' to Ctrl-x k
+if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
