@@ -58,6 +58,21 @@ map("n", "<leader>c", ":Lspsaga code_action<cr>", "code actions")
 map("n", "<leader>k", ":Lspsaga diagnostic_jump_next<cr>", "code actions")
 -- map("n", "<leader>K", ":Lspsaga diagnostic_jump_prev<cr>", "code actions")
 
+-- Overseer (taks runner)
+map("n", "<Leader>oo", "<cmd>OverseerToggle<CR>", "Overseer Toggle")
+map("n", "<Leader>ol", "<cmd>OverseerLoadBundle<CR>", "Overseer Load Bundle")
+map("n", "<Leader>or", "<cmd>OverseerRun<CR>", "Overseer Run")
+map("n", "<Leader>e", function()
+    local overseer = require("overseer")
+    overseer.run_template({name = "Runner"}, function(task)
+        if task then
+            overseer.run_action(task, '')
+            -- Task writes to quickfix list by default, so open it.
+            vim.cmd("copen")
+        end
+    end)
+end)
+
 -- Legacy
 vim.cmd([[
 function! NumberToggle()
