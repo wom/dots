@@ -50,7 +50,10 @@ end, "Toggle between light and dark themes")
 map("n", "<leader><leader>", "<cmd>nohl<cr>", "Clear highlights")
 
 -- Quick Fix toggle
-map("n", "<leader>q", require("utils.keys").toggle_quickfix)
+map("n", "<leader>q", require("utils.misc").toggle_quickfix)
+
+-- Insert current date
+map("n", "<leader><leader>d", require("utils.misc").current_date)
 
 -- LspSaga Mappings
 map("n", "<leader>t", ":Lspsaga term_toggle<cr>", "terminal toggle")
@@ -72,6 +75,13 @@ map("n", "<Leader>e", function()
         end
     end)
 end)
+-- neovide mappings
+if vim.g.neovide then
+    map({ "n", "v" }, "<C-=>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
+    map({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
+    map({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
+end
+
 
 -- Legacy
 vim.cmd([[
