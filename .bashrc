@@ -266,24 +266,41 @@ fi
 # ctrl-l to turn plain text prompt into a unix command.
 bind -x '"\C-l": _sgpt_bash'
 alias sgpt='~/venvs/shellgpt/bin/sgpt'
-# export gptRoll=" --role def-butcher "
-# export gptRoll=" --role vader "
-# export gptRoll=" --role yoda "
-# export gptRoll=" --role cp2077 "
-export gptRoll=" --role bg3_laezel "
+export gptRoll=""
 alias g="~/venvs/shellgpt/bin/sgpt ${gptRoll}"
 # # short function to spin up a shellgpt repl quickly; or let me connect to an existng.
-gr ()
-{
-    if [ -z "$1" ]; then
-        # no token passed in, generate one
-        token=$(shuf -i 1000-9999 -n 1)
-        echo "token: ${token}"
-        ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${token}"
-    else
-        g --list-chats | grep "${@}"
-        ~//venvs/shellgpt/bin/sgpt ${gptRoll} --repl "$@"
-    fi
+latest_chat() {
+    directory="/tmp/chat_cache"
+    shopt -s nullglob
+    files=("$directory"/*)
+    latest="/dev/null"
+    latest_timestamp=0
+    for file in "${files[@]}"; do
+        if [[ $file =~ ^$directory/[0-9]+$ && $(stat -c %Y $file) -gt $(stat -c %Y $latest) ]]; then
+            latest=$file
+
+        fi
+    done
+
+    echo $(basename $latest)
+}
+
+gr () {
+    case $1 in
+        last)
+            token=$(latest_chat)
+            ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${token}"
+            ;;
+        "")
+            token=$(latest_chat)
+            ((token++))
+            echo "gpt: $token"
+            ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${token}"
+            ;;
+        *)
+            ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${1}"
+            ;;
+    esac
 }
 
 function frg {
