@@ -1,10 +1,11 @@
 -- Git Stuff
+
 -- Function to copy text to system clipboard. Move to utils?
 function Copy_To_Clipboard(text)
     local success = false
 
-    -- Check if clip.exe is available
-    if os.execute("where clip.exe >nul 2>&1") == 0 then
+    local hasClip = os.execute("which clip.exe >nul 2>&1")
+    if hasClip == 0 or hasClip == true then
         os.execute("echo " .. text .. " | clip.exe")
         success = true
     elseif os.execute("command -v xclip > /dev/null 2>&1") == 0 then

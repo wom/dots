@@ -29,7 +29,7 @@ fi
 
 USER=`whoami`
 # Tossing azcli venv *first*
-export PATH="~/venvs/azclivenv/bin/:~/venvs/misctools/.venv/bin/:~/.poetry/bin/:~/scripts:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
+export PATH="~/venvs/poetry/bin/:~/venvs/misctools/.venv/bin/:~/.poetry/bin/:~/scripts:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
 #save history from all terminals.
 shopt -s histappend
 # If we have Starship - Use it! else use our custom bash prompt
