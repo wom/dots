@@ -110,6 +110,8 @@ alias j=`which autojump`
 alias pyl='PYTHONPATH=. pylint'
 alias pyt='PYTHONPATH=. pytest'
 
+alias lg='lazygit'
+
 
 
 ##

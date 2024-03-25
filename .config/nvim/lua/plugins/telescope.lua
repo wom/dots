@@ -21,6 +21,8 @@ return {
 
             -- Enable telescope fzf native, if installed
             pcall(require("telescope").load_extension, "fzf")
+            -- pcall(require("telescope").load_extension, "recent_files")
+            pcall(require("telescope").load_extension, "workspaces")
 
             local map = require("utils.keys").map
             map("n", "<leader>lr", require("telescope.builtin").oldfiles, "Recently opened")
