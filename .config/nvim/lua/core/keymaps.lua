@@ -82,6 +82,9 @@ if vim.g.neovide then
     map({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
 end
 
+-- some digraph cheaters
+map("i", "<C-S-Right>", "<C-k>->", "→")
+map("i", "<C-S-Left>", "<C-k><-", "←")
 
 -- Legacy
 vim.cmd([[
