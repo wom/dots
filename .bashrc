@@ -305,6 +305,24 @@ gr () {
     esac
 }
 
+function frd {
+    # fuzzy search via ripgrep and fzf - then open in editor on selection
+    result=`fd --ignore-case --color=always  "$@" |
+        fzf --ansi \
+        --color 'hl:-1:underline,hl+:-1:underline:reverse' \
+        --delimiter ':' \
+        --preview "/usr/bin/batcat --color=always {1} --theme='Solarized (dark)' --highlight-line {2}" \
+        --preview-window 'up,62%,border-bottom,+{2}+3/3,~3'`
+            file="${result%%:*}"
+            linenumber=`echo "${result}" | cut -d: -f2`
+            if [ ! -z "$file" ]; then
+                if [ "$TERM_PROGRAM" == "vscode" ]; then
+                    code -g "${file}:${linenumber}"
+                else
+                    $EDITOR +"${linenumber}" "$file"
+                fi
+            fi
+        }
 function frg {
     # fuzzy search via ripgrep and fzf - then open in editor on selection
     result=`rg --ignore-case --color=always --line-number --no-heading "$@" |
