@@ -20,8 +20,9 @@ return {
                     "markdown_inline",
                     "python",
                     "rust",
-                    "vimdoc",
                     "vim",
+                    "vimdoc",
+                    "yaml",
                 },
 
                 highlight = { enable = true },
