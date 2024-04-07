@@ -31,7 +31,7 @@ return {
 
         local art = {
             -- { name, width, height }
-            { "tohru", 62, 17 },
+            { "tohru", 61, 18 },
         }
 
         if arttoggle == true then
@@ -55,12 +55,13 @@ return {
             dashboard.section.header.val = logo
         end
         dashboard.section.buttons.val = {
-            dashboard.button("f", " " .. "Find files", ":Telescope find_files <CR>"),
+            dashboard.button("n", " " .. "New file", ":enew <CR>"),
             dashboard.button("p", " " .. "Select project", ":Telescope workspaces <CR>"),
+            dashboard.button("f", " " .. "Find files", ":Telescope find_files <CR>"),
             dashboard.button("o", " " .. "Old Files", ":Telescope oldfiles <CR>"),
             dashboard.button("m", " " .. "Frecent Files", ":Telescope frecency <CR>"),
             dashboard.button("w", " " .. "Wiki", ":Oil ~/src/wiki <CR>"),
-            dashboard.button("l", "󰚰 " .. "LazyUI", ":Lazy <CR>"),
+            dashboard.button("l", "󰚰 " .. "Lazy", ":Lazy <CR>"),
         }
         for _, button in ipairs(dashboard.section.buttons.val) do
             button.opts.hl = "AlphaButtons"
@@ -86,14 +87,6 @@ return {
         vim.api.nvim_create_autocmd("User", {
             pattern = "LazyVimStarted",
             callback = function()
-                local v = vim.version()
-                local dev = ""
-                if v.prerelease == "dev" then
-                    dev = "-dev+" .. v.build
-                else
-                    dev = ""
-                end
-                local version = v.major .. "." .. v.minor .. "." .. v.patch .. dev
                 local stats = require("lazy").stats()
                 local plugins_count = stats.loaded .. "/" .. stats.count
                 local ms = math.floor(stats.startuptime + 0.5)
@@ -101,11 +94,10 @@ return {
                 local date = vim.fn.strftime("%d.%m.%Y")
                 local line1 = " " .. plugins_count .. " plugins loaded in " .. ms .. "ms"
                 local line2 = "󰃭 " .. date .. "  " .. time
-                local line3 = " " .. version
 
                 local line1_width = vim.fn.strdisplaywidth(line1)
                 local line2Padded = string.rep(" ", (line1_width - vim.fn.strdisplaywidth(line2)) / 2) .. line2
-                local line3Padded = string.rep(" ", (line1_width - vim.fn.strdisplaywidth(line3)) / 2) .. line3
+                -- local line3Padded = string.rep(" ", (line1_width - vim.fn.strdisplaywidth(line3)) / 2) .. line3
 
                 dashboard.section.footer.val = {
                     line1,

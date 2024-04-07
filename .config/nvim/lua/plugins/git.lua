@@ -32,7 +32,8 @@ local function get_azure_devops_url(url_data)
         url_data.repo = url_data.repo:gsub('/([^/]+)$', '/_git/%1'):gsub('^v3/', '')
     end
 
-    local url = 'https://dev.azure.com/' .. url_data.repo
+    -- local url = 'https://dev.azure.com/' .. url_data.repo
+    local url = 'https://msazure.visualstudio.com/' .. url_data.repo
     if not (url_data.file and url_data.rev) then
         return url
     end
@@ -113,7 +114,15 @@ local function gitsigns_on_attach(bufnr)
         buffer = bufnr,
     })
 end
-
+function confirm_and_run(command)
+    print("Press ENTER to confirm running: " .. command .. " or CTRL-C to cancel.")
+    local key = vim.fn.getchar()
+    if key == 13 then -- 13 is the keycode for Enter
+        vim.cmd(command)
+    else
+        print("Operation canceled.")
+    end
+end
 return {
     'rhysd/committia.vim',
 
@@ -132,7 +141,8 @@ return {
             { '<leader>g<Space>', ':Git<Space>' },
             { '<leader>ga', '<Cmd>Git add %<CR>' },
             { '<leader>gd', '<Cmd>Git diff<CR>' },
-            -- { '<leader>gp', '<Cmd>Git push<CR>' },
+            { '<leader>gc', ':Git commit -m "fixup!"' },
+            { '<leader>gp', ':Git push' },
             --{ '<leader>gP', '<Cmd>Git push --force-with-lease<CR>' },
         },
     },
@@ -177,6 +187,7 @@ return {
             mappings = '<leader>go',
             callbacks = {
                 ['dev.azure.com'] = get_azure_devops_url,
+                ['vs-ssh.visualstudio.com'] = get_azure_devops_url,
             },
             opts = {
                 -- Set the default action to copy url to clipboard. Maybe open in browser eventually?
