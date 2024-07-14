@@ -14,8 +14,31 @@ fi
 if [ -f ~/scripts/git-completion.bash ]; then
     . ~/scripts/git-completion.bash
 fi
+
 if [ -f /usr/local/etc/bash_completion.d/poetry.bash-completion ]; then
     /usr/local/etc/bash_completion.d/poetry.bash-completion
+fi
+
+# if dbus is not running start it
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    dbus-run-session -- bash
+fi
+# carapace! Experimental
+# ~/.bashrc
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+source <(carapace _carapace)
+# Only run if DBUS is running and gnome-keyring-daemon is not
+# if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ -z "$SSH_AUTH_SOCK" ]; then
+#     # Prompt the user for the keyring password
+#     read -s -p "Enter keyring password: " keyring_password
+#     echo
+#     # Unlock the gnome-keyring-daemon with the provided password
+#     export $(echo -n "$keyring_password" | gnome-keyring-daemon --unlock)
+# fi
+
+if command -v keychain &> /dev/null
+then
+    eval `keychain --eval --agents ssh id_rsa`
 fi
 
 ##
@@ -74,17 +97,6 @@ else
 # end build prompt.
 #####
 
-# This doesn't work for me?
-if command -v keychain &> /dev/null
-then
-    eval `keychain --eval --agents ssh id_rsa`
-    #keychain -q --eval id_rsa
-    #keychain --eval --agents ssh id_rsa
-    #eval `keychain -q --eval id_rsa`
-    #eval `keychain --eval --agents ssh id_rsa`
-    #/usr/bin/keychain -q --nogui $HOME/.ssh/id_rsa
-    #source $HOME/.keychain/$HOSTNAME-sh
-fi
 
 #####
 # misc exports.
@@ -228,6 +240,7 @@ auth ()
 
 # mtu?
 alias mtu='sudo ip link set dev eth0 mtu 1400'
+alias token='az account get-access-token --query accessToken -o tsv | clip.exe'
 function wsl() {
     sudo bash <<"EOF"
 ip link set dev eth0 mtu 1400
@@ -255,47 +268,48 @@ paste()
     # $ paste > /tmp/whyhellothere
     powershell.exe Get-Clipboard | sed 's/\r//'
 }
-# Shell-GPT integration BASH v0.1 - needs shellgpt
 _sgpt_bash() {
-if [[ -n "$READLINE_LINE" ]]; then
-	READLINE_LINE=$(sgpt --shell <<< "$READLINE_LINE")
-    READLINE_POINT=${#READLINE_LINE}
-fi
+    if [[ -n "$READLINE_LINE" ]]; then
+        READLINE_LINE=$(sgpt --shell --no-interaction <<< "$READLINE_LINE")
+        READLINE_POINT=${#READLINE_LINE}
+    fi
+}
+_sgpt_describe_bash() {
+    if [[ -n "$READLINE_LINE" ]]; then
+        CMD="$READLINE_LINE"
+        local OUTPUT=$(sgpt --describe-shell <<< "$CMD")
+        #echo -e "\n${CMD}\n\n${OUTPUT}"
+        printf "\n${CMD}\n\n${OUTPUT}"
+
+    fi
 }
 
 # require the user to have shellgpt installed (easiest in a venv) and OPENAI_API_KEY set in environment.
 # Shell-GPT integration BASH v0.1
 # ctrl-l to turn plain text prompt into a unix command.
 bind -x '"\C-l": _sgpt_bash'
+bind -x '"\C-k": _sgpt_describe_bash'
 alias sgpt='~/venvs/shellgpt/bin/sgpt'
 export gptRoll=""
 alias g="~/venvs/shellgpt/bin/sgpt ${gptRoll}"
 # # short function to spin up a shellgpt repl quickly; or let me connect to an existng.
 latest_chat() {
     directory="/tmp/chat_cache"
-    shopt -s nullglob
-    files=("$directory"/*)
-    latest="/dev/null"
-    latest_timestamp=0
-    for file in "${files[@]}"; do
-        if [[ $file =~ ^$directory/[0-9]+$ && $(stat -c %Y $file) -gt $(stat -c %Y $latest) ]]; then
-            latest=$file
-
-        fi
-    done
-
+   latest=$(find /tmp/chat_cache/ -type f -regex '.*/[0-9]+$' -printf '%T@ %f\n' | sort -nr | head -n 1 | cut -d' ' -f2)
     echo $(basename $latest)
 }
 
 gr () {
+    mkdir -p /tmp/chat_cache/
     case $1 in
         last)
-            token=$(latest_chat)
+            token=$(find /tmp/chat_cache/ -type f -printf '%T@ %f\n' | sort -nr | head -n 1 | cut -d' ' -f2)
             ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${token}"
             ;;
         "")
-            token=$(latest_chat)
-            ((token++))
+            # give me n+1 latest 
+            token=$(find /tmp/chat_cache/ -maxdepth 1 -type f -regextype egrep -regex '.*/[0-9]+$' | grep -o '[0-9]\+$' | sort -n | tail -n 1 | awk '{print ($0+1)}')
+            token=${token:-1}
             echo "gpt: $token"
             ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${token}"
             ;;
@@ -358,15 +372,27 @@ then
 fi
 
 # HSTR configuration - add this to ~/.bashrc
-alias hh=hstr                    # hh to be alias for hstr
-export HSTR_CONFIG=hicolor       # get more colors
-shopt -s histappend              # append new history items to .bash_history
-export HISTCONTROL=ignorespace   # leading space hides commands from history
-export HISTFILESIZE=10000        # increase history file size (default is 500)
-export HISTSIZE=${HISTFILESIZE}  # increase history size (default is 500)
+alias hh=hstr                               # hh to be alias for hstr
+export HSTR_CONFIG=hicolor,raw-history-view # get more colors
+shopt -s histappend                         # append new history items to .bash_history
+export HISTCONTROL=ignorespace              # leading space hides commands from history
+export HISTFILESIZE=10000                   # increase history file size (default is 500)
+export HISTSIZE=${HISTFILESIZE}             # increase history size (default is 500)
 # ensure synchronization between bash memory and history file
 export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
 # if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
 if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
 # if this is interactive shell, then bind 'kill last command' to Ctrl-x k
 if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
+
+# Shell-GPT integration BASH v0.2
+_sgpt_bash() {
+if [[ -n "$READLINE_LINE" ]]; then
+    READLINE_LINE=$(sgpt --shell <<< "$READLINE_LINE" --no-interaction)
+    READLINE_POINT=${#READLINE_LINE}
+fi
+}
+bind -x '"\C-l": _sgpt_bash'
+# Shell-GPT integration BASH v0.2
+#
+
