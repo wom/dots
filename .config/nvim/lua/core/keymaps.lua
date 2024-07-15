@@ -70,9 +70,10 @@ map("n", "<Leader>e", function()
     local overseer = require("overseer")
     overseer.run_template({name = "Runner"}, function(task)
         if task then
+            local current_win = vim.api.nvim_get_current_win()
             overseer.run_action(task, '')
-            -- Task writes to quickfix list by default, so open it.
-            vim.cmd("copen")
+            vim.cmd("OverseerOpen")
+            vim.api.nvim_set_current_win(current_win)
         end
     end)
 end)
