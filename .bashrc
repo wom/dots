@@ -6,6 +6,7 @@ if [ -f /etc/bashrc ]; then
 fi
 
 unamestr=`uname`
+USER=`whoami`
 
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
@@ -23,18 +24,12 @@ fi
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
     dbus-run-session -- bash
 fi
-# carapace! Experimental
-# ~/.bashrc
+
+##
+# carapace! https://carapace-sh.github.io/carapace-bin/carapace-bin.html
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
 source <(carapace _carapace)
-# Only run if DBUS is running and gnome-keyring-daemon is not
-# if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ -z "$SSH_AUTH_SOCK" ]; then
-#     # Prompt the user for the keyring password
-#     read -s -p "Enter keyring password: " keyring_password
-#     echo
-#     # Unlock the gnome-keyring-daemon with the provided password
-#     export $(echo -n "$keyring_password" | gnome-keyring-daemon --unlock)
-# fi
+##
 
 if command -v keychain &> /dev/null
 then
@@ -43,18 +38,18 @@ fi
 
 ##
 # https://github.com/wting/autojump || \
-# brew install autojump
 if [[ "$unamestr" == 'Darwin' ]]; then
     [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
 elif [ -f ~/.autojump/etc/profile.d/autojump.sh ]; then
     . ~/.autojump/etc/profile.d/autojump.sh
 fi
+##
 
-USER=`whoami`
 # Tossing azcli venv *first*
 export PATH="~/venvs/poetry/bin/:~/venvs/misctools/.venv/bin/:~/.poetry/bin/:~/scripts:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
 #save history from all terminals.
 shopt -s histappend
+
 # If we have Starship - Use it! else use our custom bash prompt
 if command -v starship &> /dev/null
 then
@@ -114,6 +109,7 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 export BAT_THEME='Solarized (dark)'
 #####
 # Misc alias
+alias token='az account get-access-token --query accessToken -o tsv | clip.exe'
 alias cpProgress="rsync --progress -ravz"
 alias ping="time ping"
 alias c="clear"
@@ -154,6 +150,7 @@ alias kb="kubectl"
 alias gs="git status "
 # move any untracked files into a 'junk' folder
 alias gj="git ls-files --others --exclude-standard -z | xargs -0 -I {} mv {} junk/"
+
 gClean() {
     # move any untracked files into a 'junk' folder
     junk_dir="junk"
@@ -173,6 +170,7 @@ gClean() {
         echo "Not at top level of a git repository."
     fi
 }
+
 # For this to work, setup system wide kube completions.
 # kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 complete  -F __start_kubectl kb # get shell completion
@@ -238,9 +236,8 @@ auth ()
     ssh-add
 }
 
-# mtu?
+# mtu - helfpul if inside WSL2 
 alias mtu='sudo ip link set dev eth0 mtu 1400'
-alias token='az account get-access-token --query accessToken -o tsv | clip.exe'
 function wsl() {
     sudo bash <<"EOF"
 ip link set dev eth0 mtu 1400
@@ -252,6 +249,7 @@ EOF
 if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
+
 fix_line_endings()
 {
     set -x
@@ -268,6 +266,8 @@ paste()
     # $ paste > /tmp/whyhellothere
     powershell.exe Get-Clipboard | sed 's/\r//'
 }
+##
+# shell-gpt integrations
 _sgpt_bash() {
     if [[ -n "$READLINE_LINE" ]]; then
         READLINE_LINE=$(sgpt --shell --no-interaction <<< "$READLINE_LINE")
@@ -318,6 +318,8 @@ gr () {
             ;;
     esac
 }
+#/shellgpt
+##
 
 function frd {
     # fuzzy search via ripgrep and fzf - then open in editor on selection
@@ -370,7 +372,7 @@ then
     eval "$(zoxide init bash)"
     alias cd='z'
 fi
-
+##
 # HSTR configuration - add this to ~/.bashrc
 alias hh=hstr                               # hh to be alias for hstr
 export HSTR_CONFIG=hicolor,raw-history-view # get more colors
@@ -384,15 +386,6 @@ export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
 if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
 # if this is interactive shell, then bind 'kill last command' to Ctrl-x k
 if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
+##
 
-# Shell-GPT integration BASH v0.2
-_sgpt_bash() {
-if [[ -n "$READLINE_LINE" ]]; then
-    READLINE_LINE=$(sgpt --shell <<< "$READLINE_LINE" --no-interaction)
-    READLINE_POINT=${#READLINE_LINE}
-fi
-}
-bind -x '"\C-l": _sgpt_bash'
-# Shell-GPT integration BASH v0.2
-#
 
