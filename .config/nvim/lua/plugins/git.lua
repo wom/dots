@@ -1,27 +1,5 @@
 -- Git Stuff
 
--- Function to copy text to system clipboard. Move to utils?
-function Copy_To_Clipboard(text)
-    local success = false
-
-    local hasClip = os.execute("which clip.exe >nul 2>&1")
-    if hasClip == 0 or hasClip == true then
-        os.execute("echo " .. text .. " | clip.exe")
-        success = true
-    elseif os.execute("command -v xclip > /dev/null 2>&1") == 0 then
-        os.execute("echo '" .. text .. "' | xclip -selection clipboard")
-        success = true
-    elseif os.execute("command -v pbcopy > /dev/null 2>&1") == 0 then
-        os.execute("echo '" .. text .. "' | pbcopy")
-        success = true
-    else
-        vim.notify('Unable to find clipboard passthrough.')
-    end
-
-    return success
-end
-
-
 -- Build and return Azure DevOps url for `gitlinker.nvim`.
 local function get_azure_devops_url(url_data)
     if url_data.host == 'ssh.dev.azure.com' then
