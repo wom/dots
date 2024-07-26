@@ -1,0 +1,79 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    packages_to_install:
+      - vim
+      - git
+      - curl
+      - tmux
+      - fzf
+      - fd-find
+      - hstr
+      - ripgrep
+      - carapace-bin
+    dot_files:
+      - .bashrc
+      - .vimrc
+      - .tmux.conf
+      - .screenrc
+    config_files:
+      - nvim
+      - starship.toml
+  tasks:
+    - name: Add the Fury APT repository
+      ansible.builtin.apt_repository:
+        repo: "deb [trusted=yes] https://apt.fury.io/rsteube/ /"
+        state: present
+        filename: fury
+      become: yes
+
+    - name: Install required packages
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages_to_install }}"
+      become: yes
+
+    - name: Add the Fury APT repository
+      ansible.builtin.apt_repository:
+        repo: "deb [trusted=yes] https://apt.fury.io/rsteube/ /"
+        state: present
+        filename: fury
+      become: yes
+
+    - name: Get current user's home directory
+      ansible.builtin.command: echo $HOME
+      register: homedir
+      changed_when: false
+    - name: Ensure dotfiles are properly symlinked
+      block:
+        - name: Check if the destination file exists and rename it
+          shell: mv "{{ homedir.stdout }}/{{ item }}" "{{ homedir.stdout }}/{{ item }}.orig" || true
+          loop: "{{ dot_files }}"
+        - name: Create symlink for dotfile
+          file:
+            src: "{{ playbook_dir }}/{{ item }}"
+            dest: "{{ homedir.stdout }}/{{ item }}"
+            state: link
+          loop: "{{ dot_files }}"
+    - name: Ensure config files are properly symlinked
+      block:
+        - name: Ensure the .config directory exists
+          file:
+            path: "{{ homedir.stdout }}/.config"
+            state: directory
+            mode: '0755'
+        - name: Check if the destination file exists and rename it
+          shell: mv "{{ homedir.stdout }}/.config/{{ item }}" "{{ homedir.stdout }}/.config/{{ item }}.orig" || true
+          loop: "{{ config_files }}"
+        - name: Create symlink for dotfile
+          file:
+            src: "{{ playbook_dir }}/.config/{{ item }}"
+            dest: "{{ homedir.stdout }}/.config/{{ item }}"
+            state: link
+          loop: "{{ config_files }}"
+    - name: Install NeoVim
+      include_tasks: "{{ playbook_dir }}/ans_templates/neovim.yaml"
+- import_playbook: "{{ playbook_dir }}/ans_templates/setupvenvs.yaml"
+- import_playbook: "{{ playbook_dir }}/ans_templates/misctools.yaml"

@@ -1,0 +1,36 @@
+---
+- name: Setup Python virtual environments
+  hosts: localhost
+  connection: local
+  vars:
+    venvs:
+      - path: "{{ ansible_env.HOME }}/venvs/shellgpt"
+        packages:
+          - shell-gpt
+      - path: "{{ ansible_env.HOME }}/venvs/misctools"
+        packages:
+          - black
+          - isort
+      - path: "{{ ansible_env.HOME }}/venvs/poetry"
+        packages:
+          - poetry
+
+  tasks:
+    - name: Ensure virtualenv is installed
+      ansible.builtin.pip:
+        name: virtualenv
+        state: present
+
+    - name: Create virtual environments
+      ansible.builtin.command:
+        cmd: virtualenv "{{ item.path }}"
+      loop: "{{ venvs }}"
+      become: no
+      args:
+        creates: "{{ item.path }}"
+
+    - name: Install packages into virtual environments
+      ansible.builtin.shell:
+        cmd: "{{ item.0.path }}/bin/pip install {{ ' '.join(item.0.packages) }}"
+      loop: "{{ venvs|subelements('packages') }}"
+      become: no
