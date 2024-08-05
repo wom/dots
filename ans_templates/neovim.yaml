@@ -1,0 +1,44 @@
+---
+- name: Install NeoVim dependencies
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - build-essential
+      - cargo
+      - cmake
+      - curl
+      - gettext
+      - golang-go
+      - luarocks
+      - ninja-build 
+      - unzip
+      - golang-go
+    state: present
+    update_cache: yes
+
+- name: Clone NeoVim repository
+  ansible.builtin.git:
+    repo: 'https://github.com/neovim/neovim.git'
+    dest: '/tmp/neovim'
+    version: stable  # You can change this to a specific version or branch
+    update: yes  # Fetch updates if repo exists
+    force: yes  # Force overwrite local changes
+  register: git_result
+
+
+- name: Build NeoVim from source
+  ansible.builtin.shell:
+    cmd: |
+      make CMAKE_BUILD_TYPE=RelWithDebInfo
+      sudo make install
+    chdir: '/tmp/neovim'
+    creates: '/usr/local/bin/nvim'
+  when: git_result.changed
+
+# NeoVim installed - now install NPM for it to use via nvm
+- name: Install nvm via node
+  ansible.builtin.shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    nvm install --lts
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
