@@ -2,21 +2,41 @@
 - name: Setup Miscellanous tools
   hosts: localhost
   connection: local
-
   tasks:
-  - name: Install dependencies
-    become: yes
-    ansible.builtin.apt:
-      name:
-        - golang-go
-      state: present
-      update_cache: yes
-
-    # - name: Install packages into virtual environments and setup lazygit
-    #   ansible.builtin.shell:
-    #     cmd: |
-    #       LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-    #       curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-    #       tar xf lazygit.tar.gz lazygit
-    #       sudo install lazygit /usr/local/bin
-    #   become: yes
+    - name: Ensure destination directory exists
+      ansible.builtin.file:
+        path: ~/.local/script
+        state: directory
+        mode: '0755'
+    - name: Setup Starship
+      block:
+        - name: Download Starship install script
+          ansible.builtin.get_url:
+            url: https://starship.rs/install.sh
+            dest: /tmp/starship_install.sh
+            mode: '0755'
+        - name: Run Starship install script
+          ansible.builtin.command: /tmp/starship_install.sh -y
+    - name: Verify git-completion extension is available. 
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+        dest: ~/.local/script/git-completion.bash
+    - name: Download/Install latest LazyGit
+      ansible.builtin.shell:
+        cmd: |
+          cd $(mktemp -d)
+          LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+          ARCH=$(dpkg --print-architecture)
+          curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_${ARCH}.tar.gz"
+          tar xf lazygit.tar.gz lazygit
+          sudo install lazygit /usr/local/bin
+      become: yes
+    - name: zoxide
+      block:
+        - name: Download zoxide install script
+          ansible.builtin.get_url:
+            url: https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh 
+            dest: /tmp/zoxide_install.sh
+            mode: '0755'
+        - name: Run zoxide install script
+          ansible.builtin.command: /tmp/zoxide_install.sh

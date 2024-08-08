@@ -3,17 +3,22 @@
   connection: local
   vars:
     packages_to_install:
-      - vim
-      - git
+      - bat
+      - carapace-bin
       - curl
-      - tmux
-      - fzf
       - fd-find
+      - fzf
+      - git
       - hstr
       - ripgrep
-      - carapace-bin
+      - shellcheck
+      - tmux
+      - tree
+      - vim
     dot_files:
       - .bashrc
+      - .bash.d
+      - .bash_profile
       - .vimrc
       - .tmux.conf
       - .screenrc
