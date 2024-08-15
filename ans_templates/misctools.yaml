@@ -21,11 +21,25 @@
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
         dest: ~/.local/script/git-completion.bash
+    - name: Verify zfs-bash-completion extension is available. 
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/lincheney/fzf-tab-completion/master/bash/fzf-bash-completion.sh
+        dest: ~/.local/script/fzf-bash-completion.sh
+    - name: Download/Install latest fzf
+      ansible.builtin.shell:
+        cmd: |
+          cd $(mktemp -d)
+          FZF_VERSION=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | /usr/bin/grep -Po '"tag_name": "v\K[^"]*')
+          ARCH=$(dpkg --print-architecture)
+          curl -Lo fzf.tar.gz "https://github.com/junegunn/fzf/releases/download/v${FZF_VERSION}/fzf-${FZF_VERSION}-linux_${ARCH}.tar.gz"
+          tar -xzf fzf.tar.gz fzf
+          sudo install fzf /usr/local/bin
+      become: yes
     - name: Download/Install latest LazyGit
       ansible.builtin.shell:
         cmd: |
           cd $(mktemp -d)
-          LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+          LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | /usr/bin/grep -Po '"tag_name": "v\K[^"]*')
           ARCH=$(dpkg --print-architecture)
           curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_${ARCH}.tar.gz"
           tar xf lazygit.tar.gz lazygit

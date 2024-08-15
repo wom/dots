@@ -2,6 +2,13 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
+if command -v fzf > /dev/null 2>&1; then
+    if [ -f ~/.local/script/fzf-bash-completion.sh ]; then
+        . ~/.local/script/fzf-bash-completion.sh
+        bind -x '"\t": fzf_bash_completion'
+    fi
+fi
+
 if [ -f ~/.local/script/git-completion.bash ]; then
     . ~/.local/script/git-completion.bash
 fi
