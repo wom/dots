@@ -29,6 +29,9 @@ alias realpath='readlink -f'
 alias rm="rm -i"
 alias token='az account get-access-token --query accessToken -o tsv | clip.exe'
 alias vi="nvim"
+vim() {
+     nvim $(fzf --multi)
+ }
 alias vidiff="nvim -d"
 alias vimdiff="nvim -d"
 alias wget='wget -c'
