@@ -20,7 +20,6 @@ return {
         ensure_installed = {
           "lua_ls",
           "pyright",
-          "gopls",
         },
         automatic_installation = true,
       })

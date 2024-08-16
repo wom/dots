@@ -7,7 +7,6 @@
       - carapace-bin
       - curl
       - fd-find
-      - fzf
       - git
       - hstr
       - ripgrep
