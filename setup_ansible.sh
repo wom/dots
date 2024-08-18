@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Define the virtual environment directory and Ansible version
 VENV_DIR="$HOME/venvs/ansible_venv"
-ANSIBLE_VERSION="2.9.10" # Example version, adjust as needed
+ANSIBLE_VERSION="10.3.0" # Example version, adjust as needed
 
 # Check for Python and pip availability
 if ! command -v python3 &> /dev/null; then

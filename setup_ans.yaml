@@ -38,16 +38,15 @@
         state: present
       loop: "{{ packages_to_install }}"
       become: yes
-
     - name: Add the Fury APT repository
       ansible.builtin.apt_repository:
         repo: "deb [trusted=yes] https://apt.fury.io/rsteube/ /"
         state: present
         filename: fury
       become: yes
-
     - name: Get current user's home directory
-      ansible.builtin.command: echo $HOME
+      ansible.builtin.command:
+        cmd: echo $HOME
       register: homedir
       changed_when: false
     - name: Ensure dotfiles are properly symlinked

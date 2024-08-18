@@ -16,7 +16,8 @@
             dest: /tmp/starship_install.sh
             mode: '0755'
         - name: Run Starship install script
-          ansible.builtin.command: /tmp/starship_install.sh -y
+          ansible.builtin.command:
+            cmd: /tmp/starship_install.sh -y
     - name: Verify git-completion extension is available. 
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
@@ -40,7 +41,7 @@
         cmd: |
           cd $(mktemp -d)
           LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | /usr/bin/grep -Po '"tag_name": "v\K[^"]*')
-          ARCH=$(dpkg --print-architecture)
+          ARCH=$(dpkg --print-architecture | sed 's/amd64/x86_64/')
           curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_${ARCH}.tar.gz"
           tar xf lazygit.tar.gz lazygit
           sudo install lazygit /usr/local/bin
@@ -53,4 +54,5 @@
             dest: /tmp/zoxide_install.sh
             mode: '0755'
         - name: Run zoxide install script
-          ansible.builtin.command: /tmp/zoxide_install.sh
+          ansible.builtin.command: 
+            cmd: /tmp/zoxide_install.sh
