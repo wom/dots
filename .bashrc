@@ -8,7 +8,7 @@ unamestr=`uname`
 # Tossing azcli venv *first*
 export GOPATH="/usr/bin/go"
 export GOROOT="/usr/lib/go-1.18"
-export PATH="~/venvs/poetry/bin/:~/venvs/misctools/bin/:~/.poetry/bin/:~/scripts:~/.local/bin:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
+export PATH="~/venvs/poetry/bin/:~/.cargo/bin/:~/venvs/misctools/bin/:~/.poetry/bin/:~/scripts:~/.local/bin:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
 
 # if dbus is not running start it
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then

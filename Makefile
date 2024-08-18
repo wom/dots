@@ -3,9 +3,9 @@ SCRIPT_DIR := $(shell pwd)
 PLAYBOOK := setup_ans.yaml
 INVENTORY := localhost,
 
-.PHONY: all setup_venv all misctools setup_ans
+.PHONY: all setup_venv all misctools setup_ans mcfly
 # Default target
-all: setup_venv  misctools setup_links
+all: setup_venv  misctools setup_links mcfly
 
 sudo:
 	@sudo echo "Verifying Sudo rights"
@@ -24,3 +24,7 @@ all:
 misctools: | sudo
 	@echo "Running Ansible Misctools..."
 	@~/venvs/ansible_venv/bin/ansible-playbook ans_templates/misctools.yaml -i localhost,
+
+mcfly:
+	@echo "Running Ansible mcfly..."
+	@~/venvs/ansible_venv/bin/ansible-playbook ans_templates/mcfly.yaml -i localhost,

@@ -1,0 +1,12 @@
+---
+- name: Setup mcfly
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Download/Install latest mcfly!
+      ansible.builtin.shell:
+        cmd: |
+          cd $(mktemp -d)
+          git clone https://github.com/cantino/mcfly
+          cd mcfly
+          cargo install --path .
