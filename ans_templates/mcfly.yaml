@@ -3,6 +3,10 @@
   hosts: localhost
   connection: local
   tasks:
+    - name: verify latestes Rust
+      ansible.builtin.shell:
+        cmd: |
+          rustup update
     - name: Download/Install latest mcfly!
       ansible.builtin.shell:
         cmd: |
