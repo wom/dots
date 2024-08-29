@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   tasks:
-    - name: verify latestes Rust
+    - name: verify latest Rust
       ansible.builtin.shell:
         cmd: |
           rustup update
