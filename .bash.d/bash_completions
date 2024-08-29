@@ -5,7 +5,7 @@ fi
 if command -v fzf > /dev/null 2>&1; then
     if [ -f ~/.local/script/fzf-bash-completion.sh ]; then
         . ~/.local/script/fzf-bash-completion.sh
-        bind -x '"\t": fzf_bash_completion'
+        #bind -x '"\t": fzf_bash_completion'
     fi
 fi
 
