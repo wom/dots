@@ -28,6 +28,8 @@ alias pyt='PYTHONPATH=. pytest'
 alias realpath='readlink -f'
 alias rm="rm -i"
 alias token='az account get-access-token --query accessToken -o tsv | clip.exe'
+alias tui='taskwarrior-tui'
+alias t='task'
 alias vi="nvim"
 vim() {
      nvim $(fzf --multi)
