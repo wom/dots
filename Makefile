@@ -30,5 +30,9 @@ mcfly:
 	@~/venvs/ansible_venv/bin/ansible-playbook ans_templates/mcfly.yaml -i localhost,
 
 taskwarrior: | sudo
+<<<<<<< HEAD
 	@echo "Running Ansible taskwarior..."
+=======
+	@echo "Running Ansible Taskwarrior..."
+>>>>>>> 97eca2e (fuu)
 	@~/venvs/ansible_venv/bin/ansible-playbook ans_templates/taskwarrior.yaml -i localhost,
