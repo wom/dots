@@ -28,3 +28,4 @@ misctools: | sudo
 mcfly:
 	@echo "Running Ansible mcfly..."
 	@~/venvs/ansible_venv/bin/ansible-playbook ans_templates/mcfly.yaml -i localhost,
+	@~/venvs/ansible_venv/bin/ansible-playbook ans_templates/taskwarrior.yaml -i localhost,
