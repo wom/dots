@@ -1,0 +1,36 @@
+---
+- name: Setup taskwarrior
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Ensure destination directory exists
+      ansible.builtin.file:
+        path: ~/.local/bin
+        state: directory
+        mode: '0755'
+    - name: Install Taskwarrior dependencies
+      become: yes
+      ansible.builtin.apt:
+        name:
+          - uuid-dev
+        state: present
+        update_cache: yes
+    - name: Download/Install latest stable Taskwarrior!
+      ansible.builtin.shell:
+        cmd: |
+          cd $(mktemp -d)
+          git clone https://github.com/GothenburgBitFactory/taskwarrior.git taskwarrior.git
+          cd taskwarrior.git
+          git checkout stable
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target task_executable
+          sudo install -m 755 build/src/task /usr/local/bin/ 
+    - name: Download/Install latest stable Taskwarrior-tui!!
+      ansible.builtin.shell:
+        cmd: |
+          cd $(mktemp -d)
+          git clone https://github.com/kdheepak/taskwarrior-tui.git
+          cd taskwarrior-tui/
+          cargo build --release
+          sudo install -m 755 target/release/taskwarrior-tui  /usr/local/bin/
+
