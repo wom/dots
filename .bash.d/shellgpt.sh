@@ -41,7 +41,7 @@ gr () {
             ;;
         "")
             # give me n+1 latest 
-            token=$(find /tmp/chat_cache/ -maxdepth 1 -type f -regextype egrep -regex '.*/[0-9]+$' | grep -o '[0-9]\+$' | sort -n | tail -n 1 | awk '{print ($0+1)}')
+            token=$(find /tmp/chat_cache/ -maxdepth 1 -type f -regextype egrep -regex '.*/[0-9]+$' -exec basename {} \; | sort -n | tail -n 1 | awk '{print ($0+1)}')
             token=${token:-1}
             echo "gpt: $token"
             ~/venvs/shellgpt/bin/sgpt ${gptRoll} --repl "${token}"
