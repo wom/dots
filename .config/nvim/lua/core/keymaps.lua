@@ -88,6 +88,9 @@ end
 map("i", "<C-S-Right>", "<C-k>->", "→")
 map("i", "<C-S-Left>", "<C-k><-", "←")
 
+-- misc
+map({"n", "v"}, "<leader>l", ":'<,'>w !clip.exe<CR>", "Copy selection to system clipboard.")
+
 -- Legacy
 vim.cmd([[
 function! NumberToggle()
@@ -116,5 +119,6 @@ function! DiffOrig()
     endif
 endfunction
 map <leader>do :call DiffOrig()<cr>
+
 
 ]])
