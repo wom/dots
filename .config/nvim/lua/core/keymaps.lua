@@ -88,8 +88,9 @@ end
 map("i", "<C-S-Right>", "<C-k>->", "→")
 map("i", "<C-S-Left>", "<C-k><-", "←")
 
--- misc
-map({"n", "v"}, "<leader>l", ":'<,'>w !clip.exe<CR>", "Copy selection to system clipboard.")
+-- Copy selection to system clipboard. WSL only currently.
+map({"n", "v"}, "<leader>L", ":'<,'>w !clip.exe<CR>", "Copy selected lines to system clipboard.")
+map({"n", "v"}, "<leader>l", require("utils.misc").SysYank, "Copy Selected texted to system clipboard.")
 
 -- Legacy
 vim.cmd([[

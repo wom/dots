@@ -21,33 +21,20 @@ function M.current_date()
     vim.api.nvim_put({ date }, 'c', true, true)
 end
 
-function M.Get_Visual()
-  local _, ls, cs = unpack(vim.fn.getpos('v'))
-  local _, le, ce = unpack(vim.fn.getpos('.'))
-  return vim.api.nvim_buf_get_text(0, ls-1, cs-1, le-1, ce, {})
-end
 
--- Function to copy text to system clipboard. Move to utils?
-function M.Copy_To_Clipboard(text)
-    local found = ''
-    local hasClip = os.execute("which clip.exe >nul 2>&1")
-    if hasClip == 0 or hasClip == true then
-        os.execute("echo " .. text .. " | clip.exe")
-        found = "clip.exe"
-    elseif os.execute("command -v xclip > /dev/null 2>&1") == 0 then
-        os.execute("echo '" .. text .. "' | xclip -selection clipboard")
-        found = "xclip"
-    elseif os.execute("command -v pbcopy > /dev/null 2>&1") == 0 then
-        os.execute("echo '" .. text .. "' | pbcopy")
-        found = "pbcopy"
-    end
-    if found == '' then
-        vim.notify('Unable to find clipboard passthrough.')
-        return false
-    else
-        vim.notify('Copied via ' .. found .. '.')
-        return true
-    end
+function M.SysYank()
+    -- local cb = 'xsel -bi' -- set to ur clipboard
+    local cb = 'clip.exe' -- set to ur clipboard
+    local typ = 'visual'
+    local cbcn = vim.api.nvim_replace_termcodes('<C-Bslash><C-n>', true, true, true)
+    local cv = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
+    local tmap = { line = 'V', char = 'v', block = cv }
+    vim.api.nvim_feedkeys(cbcn, 'x', false) -- flushes visualmode()
+    local p1 = vim.fn.getpos(typ == 'visual' and "'<" or "'[")
+    local p2 = vim.fn.getpos(typ == 'visual' and "'>" or "']")
+    local t  = { type = (typ == 'visual' and vim.fn.visualmode() or tmap[typ]) }
+    local r  = table.concat(vim.fn.getregion(p1, p2, t), '\n')
+    vim.fn.system(cb, r)
 end
 
 return M
