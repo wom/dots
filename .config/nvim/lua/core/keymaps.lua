@@ -56,11 +56,14 @@ map("n", "<leader>q", require("utils.misc").toggle_quickfix)
 map("n", "<leader><leader>d", require("utils.misc").current_date)
 
 -- LspSaga Mappings
-map("n", "<leader>t", ":Lspsaga term_toggle<cr>", "terminal toggle")
-map("n", "<leader>c", ":Lspsaga code_action<cr>", "code actions")
-map("n", "<leader>k", ":Lspsaga diagnostic_jump_next<cr>", "code actions")
+map("n", "<leader>lt", ":Lspsaga term_toggle<cr>", "terminal toggle")
+map("n", "<leader>lc", ":Lspsaga code_action<cr>", "code actions")
+map("n", "<leader>lk", ":Lspsaga diagnostic_jump_next<cr>", "code actions")
 map("n", "<leader>lo", ":Lspsaga outline<cr>", "outline")
 -- map("n", "<leader>K", ":Lspsaga diagnostic_jump_prev<cr>", "code actions")
+
+-- Copilot Chat
+map("n", "<Leader>cc", "<cmd>CopilotChatToggle<CR>", "Copilot Chat Toggle")
 
 -- Overseer (taks runner)
 map("n", "<Leader>oo", "<cmd>OverseerToggle<CR>", "Overseer Toggle")
