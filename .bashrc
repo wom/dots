@@ -9,6 +9,9 @@ unamestr=`uname`
 export GOPATH="/usr/bin/go"
 export GOROOT="/usr/lib/go-1.18"
 export PATH="~/venvs/poetry/bin/:~/.cargo/bin/:~/venvs/misctools/bin/:~/.poetry/bin/:~/scripts:~/.local/bin:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
+export PATH="~/bin/:$PATH"
+export PATH="~/venvs/visidata/bin/:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # if dbus is not running start it
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
@@ -43,3 +46,5 @@ source ~/custCon.sh
 # # Bat theme
 export BAT_THEME='Solarized (dark)'
 
+
+. "$HOME/.local/bin/env"
