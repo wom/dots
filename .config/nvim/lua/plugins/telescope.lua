@@ -44,7 +44,6 @@ return {
             map("n", "<leader>sg", require("telescope.builtin").live_grep, "Grep")
             map("n", "<leader>sd", require("telescope.builtin").diagnostics, "Diagnostics")
             map("n", "<leader>sk", require("telescope.builtin").keymaps, "Search keymaps")
-            -- map("n", '<leader>cp', function() local actions = require("CopilotChat.actions") require("CopilotChat.integrations.telescope").pick(actions.prompt_actions()) end, { desc = "CopilotChat - Prompt actions" })
             map("n", '<leader>cp', function()
                 local actions = require("CopilotChat.actions")
                 require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
