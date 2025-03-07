@@ -95,6 +95,9 @@ map("i", "<C-S-Left>", "<C-k><-", "←")
 map({"n", "v"}, "<leader>Y", ":'<,'>w !clip.exe<CR>", "Copy selected lines to system clipboard.")
 map({"n", "v"}, "<leader>y", require("utils.misc").SysYank, "Copy Selected texted to system clipboard.")
 
+-- womwiki
+map({"n", "v"}, "<leader>W", require("utils.womwiki").picker, "womwiki!")
+
 -- Legacy
 vim.cmd([[
 function! NumberToggle()

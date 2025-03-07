@@ -9,7 +9,9 @@ return {
         },
         config = function()
             require("telescope").setup({
+                path_display = { "truncate" },
                 defaults = {
+                    dynamic_preview_title = true,
                     mappings = {
                         i = {
                             ["<C-u>"] = false,
