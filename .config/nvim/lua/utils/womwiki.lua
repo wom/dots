@@ -45,25 +45,55 @@ function M.tele_dailies()
     })
 end
 
+local function create_file_with_template(filename, template, subs)
+    local template_file = io.open(template, "r")
+    if not template_file then
+        vim.notify("Template file not found: " .. template, vim.log.levels.ERROR)
+        return
+    end
+
+    local template_content = template_file:read("*a")
+    template_file:close()
+
+    for _, subs in ipairs(subs) do
+        local key, value = subs[1], subs[2]
+        vim.notify('swapping ' .. key .. ' for ' .. value)
+        template_content = template_content:gsub('{{ ' .. key .. ' }}', value)
+    end
+
+    local file = io.open(filename, "w")
+    file:write(template_content)
+    file:close()
+end
+
 -- Open or create a daily file with a specified offset in days
 function M.open_daily(days_offset)
     days_offset = days_offset or 0
     local date = os.date("%Y-%d-%m", os.time() + days_offset * 86400)
     local filename = M.dailydir .. '/' .. date .. ".md"
-    local file = io.open(filename, "a")  -- Open the file in append mode to create it if it doesn't exist
+    vim.notify('date is ' .. date)
+    -- Check if the file exists
+    local file = io.open(filename, "r")
     if file then
+        vim.notify('File exists, opening it.')
         file:close()
-        vim.cmd("edit " .. filename)  -- Open the file in the editor
     else
-        vim.notify("Failed to open or create file: " .. filename, vim.log.levels.ERROR)
+        vim.notify('creating file.')
+        -- File doesn't exist, create it with the template content
+        local template = os.getenv("HOME") .. '/.config/nvim/templates/daily.templ'
+        local subs = {
+            {"date", date}
+        }
+        create_file_with_template(filename, template, subs)
     end
+    vim.cmd("edit " .. filename)  -- Open the file in the editor
 end
 
 -- Define choices for the picker
 local choices = {
+    { "Today", function() M.open_daily() end },
     { "Dailies", M.tele_dailies },
     { "Wikis", M.tele_wiki },
-    { "Today", function() M.open_daily() end },
     { "Yesterday", function() M.open_daily(-1) end },
 }
 

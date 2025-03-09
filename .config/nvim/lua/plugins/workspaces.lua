@@ -2,7 +2,7 @@ return {
     'natecraddock/workspaces.nvim',
     cmd = { 'WorkspacesAdd', 'WorkspacesOpen' },
     init = function()
-        vim.keymap.set('n', '<Leader>w', function()
+        vim.keymap.set('n', '<Leader>W', function()
             local workspaces = {}
             for _, workspace in ipairs(require('workspaces').get()) do
                 workspaces[workspace.path] = workspace.name

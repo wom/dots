@@ -96,7 +96,7 @@ map({"n", "v"}, "<leader>Y", ":'<,'>w !clip.exe<CR>", "Copy selected lines to sy
 map({"n", "v"}, "<leader>y", require("utils.misc").SysYank, "Copy Selected texted to system clipboard.")
 
 -- womwiki
-map({"n", "v"}, "<leader>W", require("utils.womwiki").picker, "womwiki!")
+map({"n", "v"}, "<leader>w", require("utils.womwiki").picker, "womwiki!")
 
 -- Legacy
 vim.cmd([[
