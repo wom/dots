@@ -13,6 +13,8 @@ return {
                     { "<leader>f", group = "File" },
                     { "<leader>g", group = "Git" },
                     { "<leader>l", group = "LSP" },
+                    { "<leader>m", group = "Mini" },
+                    { "<leader>ms", group = "Sessions" },
                     { "<leader>q", group = "Quit" },
                     { "<leader>s", group = "Search" },
                     { "<leader>u", group = "UI" },

@@ -98,6 +98,15 @@ map({"n", "v"}, "<leader>y", require("utils.misc").SysYank, "Copy Selected texte
 -- womwiki
 map({"n", "v"}, "<leader>w", require("utils.womwiki").picker, "womwiki!")
 
+-- mini
+local function write_session()
+    local session_name = vim.fn.input('Enter session name: ')
+    MiniSessions.write(session_name)
+end
+map({"n", "v"}, "<leader>msw", write_session, "Write MiniSession")
+map({"n", "v"}, "<leader>mss", MiniSessions.select, "MiniSession selection")
+map({"n", "v"}, "<leader>mf", MiniFiles.open, "MiniFiles")
+
 -- Legacy
 vim.cmd([[
 function! NumberToggle()
