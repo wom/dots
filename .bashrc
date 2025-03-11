@@ -8,9 +8,11 @@ unamestr=`uname`
 # Tossing azcli venv *first*
 export GOPATH="/usr/bin/go"
 export GOROOT="/usr/lib/go-1.18"
-export PATH="~/venvs/poetry/bin/:~/.cargo/bin/:~/venvs/misctools/bin/:~/.poetry/bin/:~/scripts:~/.local/bin:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
-export PATH="~/bin/:$PATH"
-export PATH="~/venvs/visidata/bin/:$PATH"
+export PATH="~/scripts:~/.local/bin:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
+while IFS= read -r -d '' dir; do
+    # add anything in ~/venvs/*/bin/ to path
+    PATH="$dir:$PATH"
+done < <(fdfind -t d -d 2 -0 bin ~/venvs)
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # if dbus is not running start it
@@ -48,3 +50,7 @@ export BAT_THEME='Solarized (dark)'
 
 
 . "$HOME/.local/bin/env"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

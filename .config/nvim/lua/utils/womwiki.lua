@@ -69,7 +69,7 @@ end
 -- Open or create a daily file with a specified offset in days
 function M.open_daily(days_offset)
     days_offset = days_offset or 0
-    local date = os.date("%Y-%d-%m", os.time() + days_offset * 86400)
+    local date = os.date("%Y-%m-%d", os.time() + days_offset * 86400)
     local filename = M.dailydir .. '/' .. date .. ".md"
     vim.notify('date is ' .. date)
     -- Check if the file exists
