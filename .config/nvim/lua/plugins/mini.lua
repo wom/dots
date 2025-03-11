@@ -7,7 +7,7 @@ return { -- Collection of various small independent plugins/modules
         -- session management. <leader>ms
         require("mini.sessions").setup()
 
-        require("mini.tabline").setup()
+        -- File management!
         require("mini.files").setup()
 
         -- notifications! Doesn't have a great show_notifications interface, so skipping for now.
