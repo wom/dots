@@ -106,6 +106,7 @@ end
 map({"n", "v"}, "<leader>msw", write_session, "Write MiniSession")
 map({"n", "v"}, "<leader>mss", MiniSessions.select, "MiniSession selection")
 map({"n", "v"}, "<leader>mf", MiniFiles.open, "MiniFiles")
+map({"n", "v"}, "<leader>z",  MiniMisc.zoom, "MiniZooooooomI")
 
 -- Legacy
 vim.cmd([[

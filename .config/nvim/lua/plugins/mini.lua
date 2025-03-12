@@ -10,6 +10,11 @@ return { -- Collection of various small independent plugins/modules
         -- File management!
         require("mini.files").setup()
 
+        -- Misc - mostly for zoom()
+        require("mini.misc").setup()
+        --
+        require("mini.animate").setup()
+
         -- notifications! Doesn't have a great show_notifications interface, so skipping for now.
         -- local win_config = function()
         --     -- Place notifications in bottom-right
