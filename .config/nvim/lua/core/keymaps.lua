@@ -100,13 +100,25 @@ map({"n", "v"}, "<leader>w", require("utils.womwiki").picker, "womwiki!")
 
 -- mini
 local function write_session()
-    local session_name = vim.fn.input('Enter session name: ')
-    MiniSessions.write(session_name)
+    local session_name = ""
+    vim.ui.input({ prompt = 'Enter New Session name: ' }, function(input)
+        if input and input ~= "" then
+            session_name = input
+            MiniSessions.write(session_name)
+        else
+            print("Session name cannot be empty.")
+        end
+    end)
 end
 map({"n", "v"}, "<leader>msw", write_session, "Write MiniSession")
 map({"n", "v"}, "<leader>mss", MiniSessions.select, "MiniSession selection")
 map({"n", "v"}, "<leader>mf", MiniFiles.open, "MiniFiles")
 map({"n", "v"}, "<leader>z",  MiniMisc.zoom, "MiniZooooooomI")
+
+-- Snacks! wh do these er?
+map({"n", "v"}, "<leader>lg",function()
+    Snacks.lazygit()
+end, "Toggle LazyGit")
 
 -- Legacy
 vim.cmd([[
