@@ -64,6 +64,7 @@ map("n", "<leader>lo", ":Lspsaga outline<cr>", "outline")
 
 -- Copilot Chat
 map("n", "<Leader>cc", "<cmd>CopilotChatToggle<CR>", "Copilot Chat Toggle")
+map("n", "<Leader>cg", "<cmd>CopilotChatCommit<CR>", "Generate Commit message.")
 
 -- Overseer (taks runner)
 map("n", "<Leader>oo", "<cmd>OverseerToggle<CR>", "Overseer Toggle")
