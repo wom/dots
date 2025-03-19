@@ -115,10 +115,20 @@ map({"n", "v"}, "<leader>mss", MiniSessions.select, "MiniSession selection")
 map({"n", "v"}, "<leader>mf", MiniFiles.open, "MiniFiles")
 map({"n", "v"}, "<leader>z",  MiniMisc.zoom, "MiniZooooooomI")
 
--- Snacks! wh do these er?
+-- Snacks!
 map({"n", "v"}, "<leader>lg",function()
     Snacks.lazygit()
 end, "Toggle LazyGit")
+
+map({"n", "v"}, "<leader>xd",function()
+    if Snacks.dim.is_enabled == nil or not Snacks.dim.is_enabled then
+        Snacks.dim.enable()
+        Snacks.dim.is_enabled = true
+    else
+        Snacks.dim.disable()
+        Snacks.dim.is_enabled = false
+    end
+end, "Dim")
 
 -- Legacy
 vim.cmd([[
