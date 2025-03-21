@@ -86,7 +86,9 @@ function M.open_daily(days_offset)
         }
         create_file_with_template(filename, template, subs)
     end
-    vim.cmd("edit " .. filename)  -- Open the file in the editor
+
+    vim.cmd("aboveleft split " .. filename)  -- Open the file in the editor
+    vim.cmd("lcd " .. vim.fn.fnameescape(M.wikidir))  -- Set wikidir just for that buffer
 end
 
 -- Define choices for the picker
