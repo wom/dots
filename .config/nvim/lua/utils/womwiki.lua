@@ -87,16 +87,28 @@ function M.open_daily(days_offset)
         create_file_with_template(filename, template, subs)
     end
 
-    vim.cmd("aboveleft split " .. filename)  -- Open the file in the editor
+    -- vim.cmd("aboveleft split " .. filename)  -- Open the file in the editor
+   -- Open the file in the editor with 20% height or minimum 10 lines
+    vim.cmd("aboveleft " .. math.max(10, math.floor(vim.o.lines * 0.2)) .. "split " .. filename)
+    vim.b.womwiki = true  -- Tag the buffer as a womwiki buffer
     vim.cmd("lcd " .. vim.fn.fnameescape(M.wikidir))  -- Set wikidir just for that buffer
+end
+
+function M.close_daily()
+    if vim.b.womwiki then
+        vim.cmd('bd')  -- Close the buffer
+    else
+        print("Not a womwiki buffer")
+    end
 end
 
 -- Define choices for the picker
 local choices = {
     { "Today", function() M.open_daily() end },
+    { "Close Daily", function() M.close_daily() end },
+    { "Yesterday", function() M.open_daily(-1) end },
     { "Dailies", M.tele_dailies },
     { "Wikis", M.tele_wiki },
-    { "Yesterday", function() M.open_daily(-1) end },
 }
 
 -- Display a picker with options
