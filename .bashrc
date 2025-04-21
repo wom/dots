@@ -5,9 +5,8 @@ if [ -f /etc/bashrc ]; then
 fi
 
 unamestr=`uname`
-# Tossing azcli venv *first*
-export GOPATH="/usr/bin/go"
-export GOROOT="/usr/lib/go-1.18"
+export GOPATH="$HOME/go"
+export GOROOT="$(find /usr/lib -maxdepth 1 -type d -name 'go-*' | sort -rV | head -n1)"
 export PATH="~/scripts:~/.local/bin:~/bin/:/usr/local/bin:/usr/local/go/bin/:$PATH"
 while IFS= read -r -d '' dir; do
     # add anything in ~/venvs/*/bin/ to path
