@@ -45,25 +45,52 @@ function M.tele_dailies()
     })
 end
 
-local function create_file_with_template(filename, template, subs)
-    local template_file = io.open(template, "r")
-    if not template_file then
-        vim.notify("Template file not found: " .. template, vim.log.levels.ERROR)
-        return
+function M.create_file_with_template(filename, template_path, subs)
+  -- Ensure filename and template_path are absolute paths or handle them appropriately
+  -- For testing, we will provide absolute paths.
+
+  local file_exists_check = io.open(filename, "r")
+  if file_exists_check then
+    io.close(file_exists_check)
+    vim.notify("File already exists: " .. filename, vim.log.levels.WARN, { title = "Womwiki" })
+    return false
+  end
+
+  local template_file, err_template = io.open(template_path, "r")
+  if not template_file then
+    vim.notify("Template not found: " .. template_path .. (err_template and (" (" .. err_template .. ")") or ""), vim.log.levels.ERROR, { title = "Womwiki" })
+    return false
+  end
+
+  local template_content = template_file:read("*a")
+  io.close(template_file)
+
+  local final_content = template_content
+  if subs then
+    for k, v in pairs(subs) do
+      -- Using a slightly more robust gsub for keys that might contain special characters for patterns
+      -- by escaping them. This assumes keys are simple strings.
+      local escaped_key = string.gsub(k, "[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0")
+      final_content = string.gsub(final_content, "${" .. escaped_key .. "}", tostring(v))
     end
+  end
 
-    local template_content = template_file:read("*a")
-    template_file:close()
+  local out_file, err_out = io.open(filename, "w")
+  if not out_file then
+    vim.notify("Failed to open file for writing: " .. filename .. (err_out and (" (" .. err_out .. ")") or ""), vim.log.levels.ERROR, { title = "Womwiki" })
+    return false
+  end
 
-    for _, subs in ipairs(subs) do
-        local key, value = subs[1], subs[2]
-        vim.notify('swapping ' .. key .. ' for ' .. value)
-        template_content = template_content:gsub('{{ ' .. key .. ' }}', value)
-    end
-
-    local file = io.open(filename, "w")
-    file:write(template_content)
-    file:close()
+  local write_ok, err_write = out_file:write(final_content)
+  if not write_ok then
+    io.close(out_file) -- Close it even on write error
+    vim.notify("Failed to write to file: " .. filename .. (err_write and (" (" .. err_write .. ")") or ""), vim.log.levels.ERROR, { title = "Womwiki" })
+    return false
+  end
+  
+  io.close(out_file)
+  vim.notify("File created: " .. filename, vim.log.levels.INFO, { title = "Womwiki" })
+  return true
 end
 
 -- Open or create a daily file with a specified offset in days
@@ -80,11 +107,12 @@ function M.open_daily(days_offset)
     else
         vim.notify('creating file.')
         -- File doesn't exist, create it with the template content
-        local template = os.getenv("HOME") .. '/.config/nvim/templates/daily.templ'
+        local template_path = os.getenv("HOME") .. '/.config/nvim/templates/daily.templ'
         local subs = {
-            {"date", date}
+            date = date -- Changed to a key-value map
         }
-        create_file_with_template(filename, template, subs)
+        -- Call the updated function, which now belongs to M
+        M.create_file_with_template(filename, template_path, subs)
     end
 
     -- vim.cmd("aboveleft split " .. filename)  -- Open the file in the editor
@@ -112,10 +140,10 @@ local choices = {
 }
 
 -- Display a picker with options
-function M.picker()
+function M.picker(current_choices)
     local options = { "womwiki" }
-    for i, choice in ipairs(choices) do
-        table.insert(options, string.format("%d: %s", i, choice[1]))
+    for i, choice_item in ipairs(current_choices) do
+        table.insert(options, string.format("%d: %s", i, choice_item[1]))
     end
 
     local buf = vim.api.nvim_create_buf(false, true)
@@ -144,25 +172,40 @@ function M.picker()
         border = "single",
     })
 
-    vim.api.nvim_buf_set_keymap(buf, 'n', '<CR>', ':lua require("utils.womwiki").execute_selection(' .. buf .. ', ' .. win .. ')<CR>', { noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(buf, 'n', '<CR>', ':lua require("utils.womwiki").execute_selection(' .. buf .. ', ' .. win .. ', nil, require("utils.womwiki").get_choices())<CR>', { noremap = true, silent = true })
     vim.api.nvim_buf_set_keymap(buf, 'n', 'q', ':lua vim.api.nvim_win_close(' .. win .. ', true)<CR>', { noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(buf, 'n', '<Esc>', ':lua vim.api.nvim_win_close(' .. win .. ', true)<CR>', { noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(buf, 'n', '<C-c>', ':lua vim.api.nvim_win_close(' .. win .. ', true)<CR>', { noremap = true, silent = true })
 
-    for i = 1, #choices do
-        vim.api.nvim_buf_set_keymap(buf, 'n', tostring(i), ':lua require("utils.womwiki").execute_selection(' .. buf .. ', ' .. win .. ', ' .. i .. ')<CR>', { noremap = true, silent = true })
+    for i = 1, #current_choices do
+        vim.api.nvim_buf_set_keymap(buf, 'n', tostring(i), ':lua require("utils.womwiki").execute_selection(' .. buf .. ', ' .. win .. ', ' .. i .. ', require("utils.womwiki").get_choices())<CR>', { noremap = true, silent = true })
     end
 end
 
+-- Getter for the module-level choices, needed for keymaps in picker
+function M.get_choices()
+    return choices
+end
+
 -- Execute the selected option from the picker
-function M.execute_selection(buf, win, index)
+function M.execute_selection(buf, win, index, choices_to_execute_from)
+    local C = choices_to_execute_from or choices -- Use provided choices or fallback to module-level
+
     if not index then
-        local line = vim.api.nvim_get_current_line()
-        index = tonumber(line:match("^(%d):"))
-    end
-    if index then
-        if choices[index] then
-            vim.api.nvim_win_close(win, true)
-            choices[index][2]()
+        -- Get the current line content from the picker buffer
+        local cursor_row = vim.api.nvim_win_get_cursor(win)[1]
+        local line_content = vim.api.nvim_buf_get_lines(buf, cursor_row - 1, cursor_row, false)[1]
+        
+        if line_content then
+            index = tonumber(line_content:match("^(%d):"))
         end
+    end
+
+    if index and C[index] and type(C[index][2]) == "function" then
+        vim.api.nvim_win_close(win, true)
+        C[index][2]() -- Execute the function from the determined choices table
+    else
+        vim.notify("Invalid selection or action for index: " .. tostring(index), vim.log.levels.WARN, { title = "Womwiki Picker" })
     end
 end
 
