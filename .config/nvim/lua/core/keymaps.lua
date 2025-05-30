@@ -65,6 +65,36 @@ map("n", "<leader>lo", ":Lspsaga outline<cr>", "outline")
 -- Copilot Chat
 map("n", "<Leader>cc", "<cmd>CopilotChatToggle<CR>", "Copilot Chat Toggle")
 map("n", "<Leader>cg", "<cmd>CopilotChatCommit<CR>", "Generate Commit message.")
+map("n", "<Leader>cs", function()
+    -- Save the current Copilot Chat with a user-defined name
+    vim.ui.input({ prompt = 'Enter chat save name: ' }, function(input)
+        if input and input ~= "" then
+            vim.cmd("CopilotChatSave " .. input)
+        else
+            print("Save name cannot be empty.")
+        end
+    end)
+end, "Save Copilot Chat with name")
+map("n", "<Leader>cl", function()
+    -- Load a saved Copilot Chat from a list of available chats
+    local saved_chats = vim.fn.glob(vim.fn.stdpath("data") .. "/copilotchat_history/*.json", false, true)
+    if #saved_chats == 0 then
+        print("No saved chats found.")
+        return
+    end
+    local chat_names = {}
+    for _, path in ipairs(saved_chats) do
+        local name = vim.fn.fnamemodify(path, ":t:r")
+        table.insert(chat_names, name)
+    end
+    vim.ui.select(chat_names, {
+        prompt = 'Select chat to load:',
+    }, function(choice)
+        if choice then
+            vim.cmd("CopilotChatLoad " .. choice)
+        end
+    end)
+end, "Load Copilot Chat from list")
 
 -- Overseer (taks runner)
 map("n", "<Leader>oo", "<cmd>OverseerToggle<CR>", "Overseer Toggle")
