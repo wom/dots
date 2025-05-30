@@ -65,6 +65,12 @@ map("n", "<leader>lo", ":Lspsaga outline<cr>", "outline")
 -- Copilot Chat
 map("n", "<Leader>cc", "<cmd>CopilotChatToggle<CR>", "Copilot Chat Toggle")
 map("n", "<Leader>cg", "<cmd>CopilotChatCommit<CR>", "Generate Commit message.")
+map("n", "<Leader>cr", function()
+    local choice = vim.fn.confirm('Reset Copilot Chat?', '&Yes\n&No', 2)
+    if choice == 1 then
+        vim.cmd("CopilotChatReset")
+    end
+end, "Reset current Copilot Chat")
 map("n", "<Leader>cs", function()
     -- Save the current Copilot Chat with a user-defined name
     vim.ui.input({ prompt = 'Enter chat save name: ' }, function(input)
