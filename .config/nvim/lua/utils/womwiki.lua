@@ -36,6 +36,7 @@ function M.wiki()
         fzf_opts = { ['--sort'] = true },
     })
 end
+
 -- Open fzf to find files in the daily directory
 function M.dailies()
     require('fzf-lua').files({
