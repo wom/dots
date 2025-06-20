@@ -29,19 +29,25 @@ function M.hello()
     vim.notify(table.concat(files, "\n"), vim.log.levels.INFO, { title = "File List" })
 end
 
--- Open Telescope to find files in the wiki directory
-function M.tele_wiki()
-    require('telescope.builtin').find_files({
-        prompt_title = "Select a File in Wiki Directory (" .. M.wikidir .. ")",
+-- Open fzf to find files in the wiki directory
+function M.wiki()
+    require('fzf-lua').files({
         cwd = M.wikidir,
+        fzf_opts = { ['--sort'] = true },
+    })
+end
+-- Open fzf to find files in the daily directory
+function M.dailies()
+    require('fzf-lua').files({
+        cwd = M.dailydir,
+        fzf_opts = { ['--sort'] = true },
     })
 end
 
--- Open Telescope to find files in the daily directory
-function M.tele_dailies()
-    require('telescope.builtin').find_files({
-        prompt_title = "Select a File in Daily Directory (" .. M.dailydir .. ")",
-        cwd = M.dailydir,
+-- grep through wiki files using fzf
+function M.search()
+    require('fzf-lua').live_grep({
+        cwd = M.wikidir,
     })
 end
 
@@ -107,8 +113,9 @@ local choices = {
     { "Today", function() M.open_daily() end },
     { "Close Daily", function() M.close_daily() end },
     { "Yesterday", function() M.open_daily(-1) end },
-    { "Dailies", M.tele_dailies },
-    { "Wikis", M.tele_wiki },
+    { "Dailies", M.dailies },
+    { "Wikis", M.wiki },
+    { "Search", M.search },
 }
 
 -- Display a picker with options
