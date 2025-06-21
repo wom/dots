@@ -37,9 +37,9 @@ return {
                 }))
             end, "Search in current buffer")
 
-            --map("n", "<leader>sf", require("telescope.builtin").find_files, "Files")
-            map("n", "<C-p>", require("telescope.builtin").find_files, "Files")
-            map("n", "<C-_>", require("telescope.builtin").live_grep, "Grep") -- maps to ctrl-/
+            -- map("n", "<leader>sf", require("telescope.builtin").find_files, "Files")
+            -- map("n", "<C-p>", require("telescope.builtin").find_files, "Files")
+            -- map("n", "<C-_>", require("telescope.builtin").live_grep, "Grep") -- maps to ctrl-/
             map("n", "<leader>sh", require("telescope.builtin").help_tags, "Help")
             map("n", "<leader>sw", require("telescope.builtin").grep_string, "Current word")
             map("n", "<leader>sf", require("telescope.builtin").find_files, "Files")
