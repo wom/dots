@@ -114,6 +114,7 @@ return {
 
     {
         'tpope/vim-fugitive',
+        lazy = false,
         keys = {
             { '<leader>gs', '<Cmd>Git<CR>' },
             { '<leader>g<Space>', ':Git<Space>' },
