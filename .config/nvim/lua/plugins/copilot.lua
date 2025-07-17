@@ -1,3 +1,25 @@
+local prompts = {
+    Typo = {
+        prompt = "> /COPILOT_GENERATE\n\nYou are a senior developer, with years of experience developing and in devops. There's at least one typo in this code. Please specify the line numbers for each typo. Do not modify additional code. Simply tell me what line the typos are on, and give me the corrected code. Only supply the correct lines, not the entire code. Above that, tell me what the code was previously and what you changed.",
+    },
+    Comments = {
+        prompt = "> /COPILOT_GENERATE\n\nYou are a senior developer, with years of experience developing and in devops. Please provide comments for the following code. Include a block at the top, with a brief explanation and smaller comments by functions.",
+    },
+    Explain = {
+        prompt = "> /COPILOT_GENERATE\n\nYou are a senior developer, with years of experience developing and in devops. Please explain how the following code works.",
+    },
+    Fix = {
+        prompt = "> /COPILOT_GENERATE\n\nYou are a senior developer, with years of experience developing and in devops. Please fix the following code. Do not display line numbers.",
+        mapping = "<leader>acf",
+        description = "CopilotChat - Fix Code",
+    },
+    Review = {
+        prompt = "> /COPILOT_GENERATE\n\nYou are a senior developer, with years of experience developing and in devops. Please review the following code and provide suggestions for improvement.",
+    },
+    Help = {
+        prompt = "You are a senior developer, with years of experience developing and in devops. Please help me, I will explain my problem below.",
+    },
+}
 return
     {
         {
@@ -56,6 +78,7 @@ return
             },
             build = "make tiktoken", -- Only on MacOS or Linux
             opts = {
+                prompts = prompts,
                 -- model = 'gpt-4o-2024-11-20',
                 -- model = 'claude-3.7-sonnet',
                 -- model = 'claude-3.7-sonnet-thought',
@@ -65,6 +88,7 @@ return
                 highlight_headers = false,
                 separator = '---',
                 error_header = '> [!ERROR] Error',
+                event = "VeryLazy",
                 mappings = {
                     complete = {
                         insert = '<Tab>',
